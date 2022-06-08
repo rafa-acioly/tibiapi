@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from tibiapi.endpoints.characters.schemas import (Achievements, Badges,
                                                   Character, Deaths, Guild,
                                                   Information)
+from tibiapi.endpoints.characters.service import get_character
 
 router = APIRouter()
 
@@ -10,7 +11,9 @@ router = APIRouter()
 @router.get("/{character_name}", response_model=Character)
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
-    return {"character_name": character_name}
+    result = await get_character(character_name)
+
+    return Character(**result)
 
 
 @router.get("/{character_name}/achievements", response_model=Achievements)
