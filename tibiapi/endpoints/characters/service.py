@@ -23,8 +23,9 @@ async def get_character(character_name: str) -> dict:
         informations = soup.find_all("table", {"class": "TableContent"})
 
         char_info = extract_basic_information(informations)
+        char_achievements = extract_achievements(informations)
 
-        return char_info
+        return char_info | char_achievements
 
 
 def extract_basic_information(content: Tag) -> dict:
@@ -40,8 +41,29 @@ def extract_badges():
     pass
 
 
-def extract_achievements():
-    pass
+def extract_achievements(content: Tag) -> dict:
+    """
+    Extract achievements from the character's page.
+    The third table is the achievements.
+    """
+    achievements = content[2]
+    rows = zip(*(iter(achievements.find_all("td")),) * 2)
+    mapped_content = {"achievements": []}
+    for row in rows:
+        grade_column, name_column = row
+
+        # Every grade column contains "N" HTML icon that represents the grade.
+        grade = len(grade_column.findChildren())
+        # If the column name contains a secret achievement, it will be marked as such.
+        secret = name_column.findChildren("img", {"class": "SecretAchievementIcon"})
+
+        mapped_content["achievements"].append({
+            "grade": grade,
+            "name": name_column.text,
+            "secret": len(secret) > 0
+        })
+    
+    return mapped_content
 
 
 def extract_deaths():
