@@ -11,7 +11,6 @@ class Badges(BaseModel):
 
 class Information(BaseModel):
     created: str
-    position: str
     loyalty_title: str
 
 

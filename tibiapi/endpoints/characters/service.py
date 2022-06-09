@@ -20,12 +20,13 @@ async def get_character(character_name: str) -> dict:
         response = await client.get(full_url)
         soup = BeautifulSoup(response.content, "html.parser")
 
-        informations = soup.find_all("table", {"class": "TableContent"})
+        page_tables = soup.find_all("table", {"class": "TableContent"})
 
-        char_info = extract_basic_information(informations)
-        char_achievements = extract_achievements(informations)
+        char_info = extract_basic_information(page_tables)
+        char_achievements = extract_achievements(page_tables)
+        char_information = extract_information(page_tables)
 
-        return char_info | char_achievements
+        return char_info | char_information | char_achievements
 
 
 def extract_basic_information(content: Tag) -> dict:
@@ -72,6 +73,16 @@ def extract_deaths():
 
 def extract_guild():
     pass
+
+
+def extract_information(content: Tag) -> dict:
+    """
+    Extract acccount information from the character's page.
+    The fourth table is the account information.
+    """
+    achievements = content[3]
+
+    return {"information": build_data(achievements)}
 
 
 def build_data(content: list) -> dict:
