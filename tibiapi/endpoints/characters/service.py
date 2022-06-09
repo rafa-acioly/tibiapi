@@ -34,6 +34,7 @@ def extract_basic_information(content: Tag) -> dict:
     Extract basic information from the character's page.
     The first table is the basic information.
     """
+
     char_info_table = content[0]
     return build_data(char_info_table)
 
@@ -47,6 +48,7 @@ def extract_achievements(content: Tag) -> dict:
     Extract achievements from the character's page.
     The third table is the achievements.
     """
+
     achievements = content[2]
     rows = zip(*(iter(achievements.find_all("td")),) * 2)
     mapped_content = {"achievements": []}
@@ -86,6 +88,19 @@ def extract_information(content: Tag) -> dict:
 
 
 def build_data(content: list) -> dict:
+    """
+    Build a dictionary from the table content.
+    This is mainly used when the table has only two columns without any special formatting.
+
+    Example:
+
+        | Account information          |
+        | -------------- | ----------- |
+        | Loyalty Title: | Title       |
+        | Created:       | Text        |
+    
+    """
+
     rows = zip(*(iter(content.find_all("td")),) * 2)
     mapped_content = defaultdict(str)
     for row in rows:
