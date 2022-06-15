@@ -1,11 +1,10 @@
 from collections import defaultdict
 
-import httpx
-from bs4 import BeautifulSoup, Tag
+from bs4 import ResultSet
+
 
 from tibiapi.tools import slugify
-
-URL = "https://www.tibia.com/community/?name={name}"
+from tibiapi.gateway import client
 
 
 async def get_character(character_name: str) -> dict:
@@ -13,23 +12,18 @@ async def get_character(character_name: str) -> dict:
     Get a character by his name.
     Scrape the Tibia.com website to get the character's information.
     """
+    page = await client.get_character(character_name)
 
-    full_url = URL.format(name=character_name)
+    page_tables = page.find_all("table", {"class": "TableContent"})
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(full_url)
-        soup = BeautifulSoup(response.content, "html.parser")
+    char_info = extract_basic_information(page_tables)
+    char_achievements = extract_achievements(page_tables)
+    char_information = extract_information(page_tables)
 
-        page_tables = soup.find_all("table", {"class": "TableContent"})
-
-        char_info = extract_basic_information(page_tables)
-        char_achievements = extract_achievements(page_tables)
-        char_information = extract_information(page_tables)
-
-        return char_info | char_information | char_achievements
+    return char_info | char_information | char_achievements
 
 
-def extract_basic_information(content: Tag) -> dict:
+def extract_basic_information(content: ResultSet) -> dict:
     """
     Extract basic information from the character's page.
     The first table is the basic information.
@@ -43,7 +37,7 @@ def extract_badges():
     pass
 
 
-def extract_achievements(content: Tag) -> dict:
+def extract_achievements(content: ResultSet) -> dict:
     """
     Extract achievements from the character's page.
     The third table is the achievements.
@@ -77,7 +71,7 @@ def extract_guild():
     pass
 
 
-def extract_information(content: Tag) -> dict:
+def extract_information(content: ResultSet) -> dict:
     """
     Extract acccount information from the character's page.
     The fourth table is the account information.
