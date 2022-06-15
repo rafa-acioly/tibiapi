@@ -1,4 +1,3 @@
-from http import HTTPStatus
 import httpx
 from bs4 import BeautifulSoup
 

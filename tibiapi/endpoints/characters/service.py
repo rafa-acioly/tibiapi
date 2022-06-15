@@ -2,9 +2,8 @@ from collections import defaultdict
 
 from bs4 import ResultSet
 
-
-from tibiapi.tools import slugify
 from tibiapi.gateway import client
+from tibiapi.tools import slugify
 
 
 async def get_character(character_name: str) -> dict:
@@ -52,14 +51,15 @@ def extract_achievements(content: ResultSet) -> dict:
         # Every grade column contains "N" HTML icon that represents the grade.
         grade = len(grade_column.findChildren())
         # If the column name contains a secret achievement, it will be marked as such.
-        secret = name_column.findChildren("img", {"class": "SecretAchievementIcon"})
+        secret = name_column.findChildren(
+            "img", {"class": "SecretAchievementIcon"})
 
         mapped_content["achievements"].append({
             "grade": grade,
             "name": name_column.text,
             "secret": len(secret) > 0
         })
-    
+
     return mapped_content
 
 
@@ -92,7 +92,7 @@ def build_data(content: list) -> dict:
         | -------------- | ----------- |
         | Loyalty Title: | Title       |
         | Created:       | Text        |
-    
+
     """
 
     rows = zip(*(iter(content.find_all("td")),) * 2)

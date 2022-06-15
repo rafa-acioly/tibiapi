@@ -1,8 +1,13 @@
 from fastapi import APIRouter
 
-from tibiapi.endpoints.characters.schemas import (Achievements, Badges,
-                                                  Character, Deaths, Guild,
-                                                  Information)
+from tibiapi.endpoints.characters.schemas import (
+    Achievements,
+    Badges,
+    Character,
+    Deaths,
+    Guild,
+    Information,
+)
 from tibiapi.endpoints.characters.service import get_character
 
 router = APIRouter()
