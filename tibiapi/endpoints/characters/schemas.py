@@ -46,24 +46,24 @@ class Deaths(BaseModel):
 
 class Character(BaseModel):
     name: str
+    level: int
     sex: str
     vocation: str
     world: str
     title: str
     comment: str
-    deletion_date: Optional[str]
+    last_login: str
     account_status: str
+    married_to: str | None
+    residence: str | None
+    deletion_date: str | None
     former_names: List[str] = Field(default=[])
     former_worlds: List[str] = Field(default=[])
     achievement_points: int = Field(default=0)
-    last_login: str
-    level: int
-    married_to: Optional[str]
-    residence: Optional[str]
     traded: bool = Field(default=False)
-    unlocked_titles: Optional[int]
+    unlocked_titles: int = Field(default=0)
     badges: List[Badges] = Field(default=[])
-    information: Optional[Information]
-    guild: Optional[Guild]
+    information: Information | None
+    guild: Guild | None
     achievements: List[Achievements] = Field(default=[])
     deaths: List[Deaths] = Field(default=[])

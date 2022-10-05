@@ -1,4 +1,4 @@
-from typing import List
+from typing import Callable, Dict, List
 
 from bs4 import ResultSet
 from tibiapi.endpoints.characters.enums import CharacterPageIdentifiers
@@ -13,7 +13,7 @@ async def get_character(character_name: str) -> Character:
     Scrape the Tibia.com website to get the character's information.
     """
 
-    section_mappers = {
+    section_mappers: Dict[str, Callable] = {
         'Account Badges': extract_badges,
         'Account Information': extract_information,
         'Account Achievements': extract_achievements,
@@ -25,8 +25,8 @@ async def get_character(character_name: str) -> Character:
 
     character = Character(**extract_basic_information(page_tables))
     for section_title in page.select(f".{CharacterPageIdentifiers.SECTION_TITLE.value}"):
-        if (callback := section_mappers.get(section_title)):
-            callback(page_tables, character)
+        if (extractor := section_mappers.get(section_title)):
+            extractor(page_tables, character)
 
     return character
 
@@ -37,7 +37,7 @@ async def get_character(character_name: str) -> Character:
     # return char_info | char_achievements
 
 
-def extract_basic_information(content: ResultSet) -> dict:
+def extract_basic_information(content: ResultSet) -> Dict[str, str]:
     """
     Extract basic information from the character's page, the
     basic information are name, sex, vocation and etc.
