@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Badges(BaseModel):
@@ -51,19 +51,19 @@ class Character(BaseModel):
     world: str
     title: str
     comment: str
-    deletion_date: str
+    deletion_date: Optional[str]
     account_status: str
-    former_names: List[str]
-    former_worlds: List[str]
-    achievement_points: int
+    former_names: List[str] = Field(default=[])
+    former_worlds: List[str] = Field(default=[])
+    achievement_points: int = Field(default=0)
     last_login: str
     level: int
-    married_to: str
-    residence: str
-    traded: bool
-    unlocked_titles: int
-    badges: List[Badges]
-    information: Information
-    guild: Guild
-    achievements: List[Achievements]
-    deaths: List[Deaths]
+    married_to: Optional[str]
+    residence: Optional[str]
+    traded: bool = Field(default=False)
+    unlocked_titles: Optional[int]
+    badges: List[Badges] = Field(default=[])
+    information: Optional[Information]
+    guild: Optional[Guild]
+    achievements: List[Achievements] = Field(default=[])
+    deaths: List[Deaths] = Field(default=[])
