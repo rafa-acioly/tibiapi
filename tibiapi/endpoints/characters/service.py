@@ -75,4 +75,4 @@ def extract_information(content: ResultSet) -> dict:
     """
     achievements = content[3]
 
-    return {"information": build_data(achievements)}
+    return {"information": extract_table_information(achievements)}
