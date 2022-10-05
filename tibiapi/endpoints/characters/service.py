@@ -3,7 +3,7 @@ from collections import defaultdict
 from bs4 import ResultSet
 
 from tibiapi.gateway import client
-from tibiapi.tools import build_data
+from tibiapi.tools import extract_table_information
 
 
 async def get_character(character_name: str) -> dict:
@@ -29,7 +29,7 @@ def extract_basic_information(content: ResultSet) -> dict:
     """
 
     char_info_table = content[0]
-    return build_data(char_info_table)
+    return extract_table_information(char_info_table)
 
 
 def extract_badges():

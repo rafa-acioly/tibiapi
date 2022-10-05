@@ -3,7 +3,7 @@ import re
 import unicodedata
 
 
-def build_data(content: list) -> dict:
+def extract_table_information(content: list) -> dict:
     """
     Build a dictionary from the table content. This is mainly used when
     the table has only two columns representing a key and a value
