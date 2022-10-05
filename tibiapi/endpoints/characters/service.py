@@ -3,7 +3,7 @@ from collections import defaultdict
 from bs4 import ResultSet
 
 from tibiapi.gateway import client
-from tibiapi.tools import slugify
+from tibiapi.tools import build_data
 
 
 async def get_character(character_name: str) -> dict:
@@ -79,26 +79,3 @@ def extract_information(content: ResultSet) -> dict:
     achievements = content[3]
 
     return {"information": build_data(achievements)}
-
-
-def build_data(content: list) -> dict:
-    """
-    Build a dictionary from the table content.
-    This is mainly used when the table has only two columns without any special formatting.
-
-    Example:
-
-        | Account information          |
-        | -------------- | ----------- |
-        | Loyalty Title: | Title       |
-        | Created:       | Text        |
-
-    """
-
-    rows = zip(*(iter(content.find_all("td")),) * 2)
-    mapped_content = defaultdict(str)
-    for row in rows:
-        column_name, column_value = row
-        mapped_content[slugify(column_name.text)] = column_value.text
-
-    return mapped_content

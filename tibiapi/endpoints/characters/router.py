@@ -16,9 +16,7 @@ router = APIRouter()
 @router.get("/{character_name}")
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
-    result = await get_character(character_name)
-
-    return result
+    return await get_character(character_name)
 
 
 @router.get("/{character_name}/achievements", response_model=Achievements)
