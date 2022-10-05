@@ -1,4 +1,5 @@
-from typing import Callable, Dict, List
+from collections.abc import Callable
+from typing import Dict, List
 
 from bs4 import ResultSet
 from tibiapi.endpoints.characters.enums import CharacterPageIdentifiers
@@ -13,7 +14,7 @@ async def get_character(character_name: str) -> Character:
     Scrape the Tibia.com website to get the character's information.
     """
 
-    section_mappers: Dict[str, Callable] = {
+    section_mappers: Dict[str, Callable[[ResultSet, Character], Character]] = {
         'Account Badges': extract_badges,
         'Account Information': extract_information,
         'Account Achievements': extract_achievements,
