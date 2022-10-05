@@ -14,8 +14,8 @@ api_router = APIRouter(prefix="/api/v1")
 |
 | Here is where we can register API routes for the application.
 """
-api_router.include_router(characters, prefix="/characters")
-api_router.include_router(guilds, prefix="/guilds")
-api_router.include_router(worlds, prefix="/worlds")
+api_router.include_router(characters, prefix="/characters", tags=['Character'])
+api_router.include_router(guilds, prefix="/guilds", tags=['Guilds'])
+api_router.include_router(worlds, prefix="/worlds", tags=['Worlds'])
 
 app.include_router(api_router)
