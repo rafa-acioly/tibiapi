@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter
 
 from tibiapi.endpoints.characters.schemas import (
@@ -19,13 +20,13 @@ async def find(character_name: str) -> Character:
     return await get_character(character_name)
 
 
-@router.get("/{character_name}/achievements", response_model=Achievements)
+@router.get("/{character_name}/achievements", response_model=List[Achievements])
 async def find_achievements(character_name: str) -> Achievements:
     """Get achievements from a character."""
     return {"character_name": character_name}
 
 
-@router.get("/{character_name}/badges", response_model=Badges)
+@router.get("/{character_name}/badges", response_model=List[Badges])
 async def find_badges(character_name: str) -> Badges:
     """Get badges from a character."""
     return {"character_name": character_name}
