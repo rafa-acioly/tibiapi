@@ -1,6 +1,6 @@
-from collections import defaultdict
 import re
 import unicodedata
+from collections import defaultdict
 
 
 def extract_table_information(content: list) -> dict:

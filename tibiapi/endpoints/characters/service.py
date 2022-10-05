@@ -1,7 +1,4 @@
-from collections import defaultdict
-
 from bs4 import ResultSet
-
 from tibiapi.gateway import client
 from tibiapi.tools import extract_table_information
 
