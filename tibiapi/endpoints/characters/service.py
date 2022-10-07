@@ -31,12 +31,6 @@ async def get_character(character_name: str) -> Character:
 
     return character
 
-    # char_info = extract_basic_information(page_tables)
-    # char_achievements = extract_achievements(page_tables)
-    # char_information = extract_information(page_tables)
-
-    # return char_info | char_achievements
-
 
 def extract_basic_information(content: ResultSet) -> Dict[str, str]:
     """
@@ -102,10 +96,6 @@ def extract_achievements(content: ResultSet, char: Character) -> Character:
 
 
 def extract_deaths():
-    pass
-
-
-def extract_guild():
     pass
 
 

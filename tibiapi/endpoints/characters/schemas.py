@@ -50,7 +50,7 @@ class Character(BaseModel):
     vocation: str
     world: str
     title: str
-    comment: str
+    comment: str | None
     last_login: str
     account_status: str
     married_to: str | None
