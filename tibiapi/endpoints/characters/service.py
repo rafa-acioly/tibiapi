@@ -26,7 +26,7 @@ async def get_character(character_name: str) -> Character:
 
     character = Character(**extract_basic_information(page_tables))
     for section_title in page.select(f".{CharacterPageIdentifiers.SECTION_TITLE.value}"):
-        if (extractor := section_mappers.get(section_title)):
+        if (extractor := section_mappers.get(section_title.text)):
             extractor(page_tables, character)
 
     return character
@@ -48,7 +48,7 @@ def extract_basic_information(content: ResultSet) -> Dict[str, str]:
     return extract_table_information(char_info_table)
 
 
-def extract_badges(content: ResultSet, char: Character) -> List[Badges]:
+def extract_badges(content: ResultSet, char: Character) -> Character:
     """
     Extract the badge's information from character's page.
     The second table is the badges' information,
@@ -56,7 +56,15 @@ def extract_badges(content: ResultSet, char: Character) -> List[Badges]:
     character has no badges.
     """
 
-    return []
+    badges_table = content[1]
+    badges: List[Badges] = []
+    for badge in badges_table.find_all("img"):
+        name, image = badge['alt'], badge['src']
+        badges.append(Badges(name=name, icon_url=image))
+
+    char.badges = badges
+
+    return char
 
 
 def extract_achievements(content: ResultSet, char: Character) -> Character:

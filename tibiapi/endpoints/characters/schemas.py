@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field
 class Badges(BaseModel):
     name: str
     icon_url: str
-    description: str
 
 
 class Information(BaseModel):
