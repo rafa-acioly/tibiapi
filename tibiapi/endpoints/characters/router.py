@@ -16,25 +16,28 @@ from tibiapi.endpoints.characters.service import get_achievements, get_character
 router = APIRouter()
 
 
-@cache(expire=86400)  # 24 hours
+@cache(expire=10800)  # 3 hours
 @router.get("/{character_name}")
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
     return await get_character(character_name)
 
 
+@cache(expire=300)  # 5 minutes
 @router.get("/{character_name}/achievements", response_model=List[Achievements])
 async def find_achievements(character_name: str) -> Achievements:
     """Get achievements from a character."""
     return await get_achievements(character_name)
 
 
+@cache(expire=10800)  # 3 hours
 @router.get("/{character_name}/badges", response_model=List[Badges])
 async def find_badges(character_name: str) -> Badges:
     """Get badges from a character."""
     return {"character_name": character_name}
 
 
+@cache(expire=120)  # 2 minutes
 @router.get("/{character_name}/deaths", response_model=Deaths)
 async def find_deaths(character_name: str) -> Deaths:
     """Get deaths from a character."""
