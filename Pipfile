@@ -14,8 +14,13 @@ isort = "==4.2.15"
 vcrpy = "==4.2.1"
 fastapi-redis-cache = "*"
 fastapi = "*"
+pydantic-settings = "*"
 
 [dev-packages]
+pytest = "==3.6.3"
+isort = "==4.2.15"
+flake8 = "==4.0.1"
+vcrpy = "==4.2.1"
 
 [requires]
 python_version = "3.12"
