@@ -29,6 +29,7 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
     rows = zip(*(iter(achievements.find_all("td")),) * 2)
 
     mapped_achievements = []
+    breakpoint()
     for row in rows:
         grade_column, name_column = row
 
@@ -41,7 +42,7 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
         # the column with the name will have an HTML
         # child with a tag "secret".
         secrets = name_column.findChildren(
-            "img", {"class": CharacterPageIdentifiers.SECRET_ACHIEVEMENT})
+            "img", {"class": CharacterPageIdentifiers.SECRET_ACHIEVEMENT.value})
 
         mapped_achievements.append(Achievements(
             grade=grade, name=name_column.text, secret=len(secrets) > 0))
