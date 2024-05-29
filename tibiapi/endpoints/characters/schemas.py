@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import List, Optional, Union
 
 from pydantic import BaseModel, Field
@@ -56,13 +57,10 @@ class Character(BaseModel):
     married_to: str | None
     residence: str | None
     deletion_date: str | None
-    former_names: List[str] = Field(default=[])
-    former_worlds: List[str] = Field(default=[])
+    former_names: str | None
+    former_world: str | None
     achievement_points: int = Field(default=0)
     traded: bool = Field(default=False)
     unlocked_titles: int = Field(default=0)
-    badges: List[Badges] = Field(default=[])
     information: Information | None
-    guild: Guild | None
-    achievements: List[Achievements] = Field(default=[])
-    deaths: List[Deaths] = Field(default=[])
+    guild_membership: str | None
