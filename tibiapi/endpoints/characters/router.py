@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter
-from fastapi_redis_cache import cache
+from fastapi_redis_cache import cache, cache_one_day
 
 from tibiapi.endpoints.characters.schemas import (
     Achievements,
@@ -19,14 +19,14 @@ from tibiapi.endpoints.characters.service import (
 router = APIRouter()
 
 
-@cache(expire=10800)  # 3 hours
 @router.get("/{character_name}", summary="Find a character by his name.")
+@cache_one_day()
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
     return await get_character(character_name)
 
 
-@cache(expire=10800)  # 3 hours
+@cache_one_day()
 @router.get(
     "/{character_name}/characters",
     response_model=List[Characters],

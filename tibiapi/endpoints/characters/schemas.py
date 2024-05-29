@@ -70,3 +70,10 @@ class Character(BaseModel):
     unlocked_titles: int = Field(default=0)
     guild_membership: str | None = Field(default=None)
     account_information: Information | None = Field(default=None)
+
+    def to_dict(self):
+        return self.model_dump_json()
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
