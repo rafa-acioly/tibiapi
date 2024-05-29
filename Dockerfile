@@ -4,11 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install pipenv && pipenv install --deploy
-
-RUN pipenv run python -m pip freeze > /app/requirements.txt
-
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install pipenv && pipenv install --system --deploy
 
 EXPOSE 8080
 
