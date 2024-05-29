@@ -118,11 +118,14 @@ def extract_characters(content: ResultSet) -> List[Characters]:
     characters from the player.
     """
 
+    # Although the website shows the table as the second to last,
+    # the table is the forth from last in the HTML content.
+    # The last tables (after the fourth) are the footer of the page,
+    # and the cookies disclaimer.
     characters_table = content[len(content) - 4]
     characters: List[Characters] = []
 
-    # Ignore the first row of the table, this row contains
-    # the table headers.
+    # Ignore the first row of the table, this row contains the table headers.
     for char in characters_table.find_all("tr")[1:]:
         # The "_" variable is used to ignore the last column
         # of the table, this column is a button to view
