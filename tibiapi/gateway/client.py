@@ -1,7 +1,7 @@
 import httpx
 from bs4 import BeautifulSoup
 
-CHARACTER_URL = "https://www.tibia.com/community/?name={name}"
+CHARACTER_URL = "https://www.tibia.com/community/?subtopic=characters&name={name}"
 WORLD_URL = "https://www.tibia.com/community/?subtopic=worlds&world={name}"
 GUILD_URL = "https://www.tibia.com/community/?subtopic=guilds&page=view"
 

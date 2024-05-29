@@ -7,11 +7,14 @@ from tibiapi.endpoints.characters.schemas import (
     Achievements,
     Badges,
     Character,
+    Characters,
     Deaths,
-    Guild,
-    Information,
 )
-from tibiapi.endpoints.characters.service import get_achievements, get_character
+from tibiapi.endpoints.characters.service import (
+    get_achievements,
+    get_character,
+    get_characters,
+)
 
 router = APIRouter()
 
@@ -21,6 +24,12 @@ router = APIRouter()
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
     return await get_character(character_name)
+
+
+@router.get("/{character_name}/characters", response_model=List[Characters])
+async def find_characters(character_name: str) -> Characters:
+    """Get all characters from a specific player."""
+    return await get_characters(character_name)
 
 
 @cache(expire=300)  # 5 minutes
@@ -41,16 +50,4 @@ async def find_badges(character_name: str) -> Badges:
 @router.get("/{character_name}/deaths", response_model=Deaths)
 async def find_deaths(character_name: str) -> Deaths:
     """Get deaths from a character."""
-    return {"character_name": character_name}
-
-
-@router.get("/{character_name}/guild", response_model=Guild)
-async def find_guild(character_name: str) -> Guild:
-    """Get guild from a character."""
-    return {"character_name": character_name}
-
-
-@router.get("/{character_name}/information", response_model=Information)
-async def find_information(character_name: str) -> Information:
-    """Get information from a character."""
     return {"character_name": character_name}

@@ -43,6 +43,13 @@ class Deaths(BaseModel):
     killers: List[DeathKiller]
 
 
+class Characters(BaseModel):
+    name: str
+    world: str
+    main: bool = Field(default=False)
+    status: str | None = Field(default=None)
+
+
 class Character(BaseModel):
     name: str
     level: int

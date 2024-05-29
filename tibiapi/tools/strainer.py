@@ -4,7 +4,12 @@ from typing import Dict, List
 from bs4 import ResultSet
 
 from tibiapi.endpoints.characters.enums import CharacterPageIdentifiers
-from tibiapi.endpoints.characters.schemas import Achievements, Badges, Character
+from tibiapi.endpoints.characters.schemas import (
+    Achievements,
+    Badges,
+    Character,
+    Characters,
+)
 from tibiapi.tools import slugify
 
 
@@ -38,7 +43,7 @@ def extract_table_information(content: list) -> dict:
     return mapped_content
 
 
-def extract_basic_information(content: ResultSet) -> Dict[str, str]:
+def extract_basic_information(content: ResultSet) -> Character:
     """
     Extract basic information from the character's page, the
     basic information are name, sex, vocation and etc.
@@ -50,7 +55,9 @@ def extract_basic_information(content: ResultSet) -> Dict[str, str]:
     char_info = extract_table_information(char_info_table)
     account_info = extract_table_information(account_info_table)
 
-    return {**char_info, **{"account_information": account_info}}
+    char = char_info | account_info
+
+    return Character(**char)
 
 
 def extract_achievements(content: ResultSet) -> List[Achievements]:
@@ -102,3 +109,38 @@ def extract_badges(content: ResultSet, char: Character) -> Character:
     char.badges = badges
 
     return char
+
+
+def extract_characters(content: ResultSet) -> List[Characters]:
+    """
+    Extract a list of characters from the player's page.
+    The second to last table is the list of
+    characters from the player.
+    """
+
+    characters_table = content[len(content) - 4]
+    characters: List[Characters] = []
+
+    # Ignore the first row of the table, this row contains
+    # the table headers.
+    for char in characters_table.find_all("tr")[1:]:
+        # The "_" variable is used to ignore the last column
+        # of the table, this column is a button to view
+        # the character's information.
+        name_column, world_column, status_column, _ = char.find_all("td")
+
+        # The name column contains the character's name and a number
+        # example: "1. Name", we split the string by the first space
+        # to get only the name.
+        name = name_column.text.split(" ", 1)[1].strip()
+
+        status = status_column.text if len(status_column.text) > 0 else None
+
+        # The name column contains an image with an "m" letter
+        # that represents the main character of the player.
+        main = name_column.find("img") is not None
+
+        characters.append(Characters(
+            name=name, world=world_column.text, main=main, status=status))
+
+    return characters
