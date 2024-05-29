@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from typing import List, Optional, Union
 
 from pydantic import BaseModel, Field
@@ -54,13 +53,13 @@ class Character(BaseModel):
     comment: str | None
     last_login: str
     account_status: str
-    married_to: str | None
+    married_to: str | None = None
     residence: str | None
-    deletion_date: str | None
+    deletion_date: str | None = None
     former_names: str | None
     former_world: str | None
     achievement_points: int = Field(default=0)
     traded: bool = Field(default=False)
     unlocked_titles: int = Field(default=0)
-    information: Information | None
+    information: Information | None = None
     guild_membership: str | None

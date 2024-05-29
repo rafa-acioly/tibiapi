@@ -29,7 +29,6 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
     rows = zip(*(iter(achievements.find_all("td")),) * 2)
 
     mapped_achievements = []
-    breakpoint()
     for row in rows:
         grade_column, name_column = row
 
