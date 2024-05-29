@@ -25,7 +25,7 @@ def extract_table_information(content: list) -> dict:
     Example:
         {
             "loyalty_title": "text",
-            "created": "text"
+            "title": "text"
         }
     """
 
