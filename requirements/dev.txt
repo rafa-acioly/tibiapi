@@ -1,6 +1,0 @@
--r requirements.txt
-
-pytest==3.6.3
-isort==4.2.15
-flake8==4.0.1
-vcrpy==4.2.1
