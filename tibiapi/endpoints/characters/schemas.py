@@ -50,16 +50,16 @@ class Character(BaseModel):
     vocation: str
     world: str
     title: str
-    comment: str | None
+    comment: str | None = Field(default=None)
     last_login: str
     account_status: str
-    married_to: str | None = None
+    married_to: str | None = Field(default=None)
     residence: str | None
-    deletion_date: str | None = None
-    former_names: str | None
-    former_world: str | None
+    deletion_date: str | None = Field(default=None)
+    former_names: str | None = Field(default=None)
+    former_world: str | None = Field(default=None)
     achievement_points: int = Field(default=0)
     traded: bool = Field(default=False)
     unlocked_titles: int = Field(default=0)
-    information: Information | None = None
-    guild_membership: str | None
+    information: Information | None = Field(default=None)
+    guild_membership: str | None = Field(default=None)
