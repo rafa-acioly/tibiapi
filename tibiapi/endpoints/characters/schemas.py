@@ -61,5 +61,5 @@ class Character(BaseModel):
     achievement_points: int = Field(default=0)
     traded: bool = Field(default=False)
     unlocked_titles: int = Field(default=0)
-    information: Information | None = Field(default=None)
     guild_membership: str | None = Field(default=None)
+    account_information: Information | None = Field(default=None)

@@ -45,7 +45,12 @@ def extract_basic_information(content: ResultSet) -> Dict[str, str]:
     """
 
     char_info_table = content[0]
-    return extract_table_information(char_info_table)
+    account_info_table = content[2]
+
+    char_info = extract_table_information(char_info_table)
+    account_info = extract_table_information(account_info_table)
+
+    return {**char_info, **{"account_information": account_info}}
 
 
 def extract_achievements(content: ResultSet) -> List[Achievements]:
