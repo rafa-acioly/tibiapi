@@ -7,8 +7,16 @@ services:
       - "5000:5000"
     depends_on:
       - db
+    networks:
+      - tibiapi-net
   db:
     image: redis:6.2-alpine
     restart: always
     ports:
       - "6379:6379"
+    networks:
+      - tibiapi-net
+
+networks:
+  tibiapi-net:
+    external: true
