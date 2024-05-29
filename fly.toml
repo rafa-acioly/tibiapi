@@ -1,15 +1,15 @@
-# fly.toml app configuration file generated for tibi-api on 2024-05-29T09:18:58-03:00
+# fly.toml app configuration file generated for tibiapi on 2024-05-29T15:13:28-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'tibi-api'
+app = 'tibiapi'
 primary_region = 'gru'
 
 [build]
 
 [http_service]
-  internal_port = 80
+  internal_port = 8080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
