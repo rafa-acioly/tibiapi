@@ -2,6 +2,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from tibiapi.endpoints.characters.exceptions import CharacterNotFound
+from tibiapi.endpoints.guilds.exceptions import GuildNotFound
 
 CHARACTER_URL = "https://www.tibia.com/community/?subtopic=characters&name={name}"
 WORLD_URL = "https://www.tibia.com/community/?subtopic=worlds&world={name}"
@@ -49,4 +50,10 @@ async def get_guild(name: str) -> BeautifulSoup:
     response = await _post(GUILD_URL, {"GuildName": name})
     response.raise_for_status()
 
-    return BeautifulSoup(response.content, "html.parser")
+    page = BeautifulSoup(response.content, "html.parser")
+
+    has_no_guild_container = page.select_one("#GuildInformationContainer")
+    if has_no_guild_container is None:
+        raise GuildNotFound(name)
+
+    return page
