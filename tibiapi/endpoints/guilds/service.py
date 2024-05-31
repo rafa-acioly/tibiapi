@@ -2,10 +2,7 @@ import re as regex
 from datetime import datetime
 from typing import Dict, List
 
-import tibiapi.tools.strainer as strainer
-from tibiapi.gateway import client
-from tibiapi.tools import slugify
-
+from .client import get_guild
 from .enums import GuildPageIdentifiers
 from .schemas import Guild, GuildHall, GuildMember, GuildMemberInvite
 
@@ -30,7 +27,8 @@ async def find_guild(guild_name: str) -> Guild:
     The guild information is split by new lines and the information is
     extracted from the text.
     """
-    page = await client.get_guild(guild_name)
+
+    page = await get_guild(guild_name)
 
     guild_info_container = page.select_one(
         GuildPageIdentifiers.INFORMATION_CONTAINER.value)
@@ -61,7 +59,7 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     """
     # TODO: Find a way to get the first and second member information without skipping the rows
 
-    page = await client.get_guild(guild_name)
+    page = await get_guild(guild_name)
 
     members_table = page.select_one(".TableContainer table.Table3")
     table_rows = members_table.select("tr[bgcolor]") if not online else members_table.select(
@@ -94,7 +92,7 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
 async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
     """Get the invited members of a guild by its name."""
 
-    page = await client.get_guild(guild_name)
+    page = await get_guild(guild_name)
 
     invitation_container = page.select(".TableContentContainer")
     invitation_table = invitation_container[len(invitation_container) - 4]

@@ -1,7 +1,6 @@
 from typing import List
 
-from tibiapi.gateway.client import all_worlds
-
+from .client import all_worlds
 from .schemas import World
 
 
