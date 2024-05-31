@@ -49,7 +49,15 @@ async def find_guild(guild_name: str) -> Guild:
 
 
 async def find_guild_members(guild_name: str, online: bool | None = False) -> List[GuildMember]:
-    """Get the members of a guild by its name."""
+    """
+    Get the members of a guild by its name.
+
+    The table that contains the guild members is a real mess, the first "row"
+    contains the table title, it's not a real row, so we need to skip it.
+    The second row contains the table headers along with the
+    information of the first member, for now,
+    we are going to skip it.
+    """
 
     page = await client.get_guild(guild_name)
 
@@ -69,7 +77,6 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
                 status=cells[5].text,
             ))
 
-    breakpoint()
     return members
 
 
