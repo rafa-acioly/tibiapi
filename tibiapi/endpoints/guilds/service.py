@@ -58,6 +58,7 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     information of the first member, for now,
     we are going to skip it.
     """
+    # TODO: Find a way to get the first member information without skipping the first row
 
     page = await client.get_guild(guild_name)
 
@@ -68,9 +69,18 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     for row in table_rows[2:]:
         cells = row.find_all("td")
         if len(cells) > 0:
+            cell_content = cells[1].text
+
+            # The member name is inside an <a> tag
+            # The title is the text after the member name
+            member_name = cells[1].find("a").text
+            title = cell_content.replace(
+                member_name, "").replace("(", "").replace(")", "")
+
             members.append(GuildMember(
                 rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
                 name=cells[1].find("a").text,
+                title=title.strip() if len(title.strip()) > 0 else None,
                 vocation=cells[2].text,
                 level=cells[3].text,
                 joining_date=cells[4].text,
