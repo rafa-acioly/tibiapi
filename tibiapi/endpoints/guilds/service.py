@@ -1,10 +1,12 @@
 import re as regex
 from typing import Dict, List
 
+import tibiapi.tools.strainer as strainer
 from tibiapi.gateway import client
 from tibiapi.tools import slugify
 
-from .schemas import Guild, GuildHall
+from .enums import GuildPageIdentifiers
+from .schemas import Guild, GuildHall, GuildMember
 
 
 async def find_guild(guild_name: str) -> Guild:
@@ -29,20 +31,46 @@ async def find_guild(guild_name: str) -> Guild:
     """
     page = await client.get_guild(guild_name)
 
-    guild_info_container = page.select_one("#GuildInformationContainer")
+    guild_info_container = page.select_one(
+        GuildPageIdentifiers.INFORMATION_CONTAINER.value)
     guild_paragraphs = guild_info_container.text.split("\n")
 
-    world, foundation_date = _parse_guild_foundation(guild_paragraphs)
+    foundation = _parse_guild_foundation(guild_paragraphs)
 
     return Guild(
         name=guild_name,
-        world=world,
+        world=foundation["world"],
         active=_parse_guild_status(guild_paragraphs),
         open_applications=_parse_guild_application(guild_paragraphs),
         guild_hall=_parse_guild_hall(guild_paragraphs),
-        foundation_date=foundation_date,
+        foundation_date=foundation["foundation_date"],
         homepage=_parse_guild_homepage(guild_paragraphs),
     )
+
+
+async def find_guild_members(guild_name: str, online: bool | None = False) -> List[GuildMember]:
+    """Get the members of a guild by its name."""
+
+    page = await client.get_guild(guild_name)
+
+    members_table = page.select_one(".TableContainer table.Table3")
+    table_rows = members_table.find_all("tr", bgcolor=True)
+
+    members: List[GuildMember] = []
+    for row in table_rows[2:]:
+        cells = row.find_all("td")
+        if len(cells) > 0:
+            members.append(GuildMember(
+                rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
+                name=cells[1].find("a").text,
+                vocation=cells[2].text,
+                level=cells[3].text,
+                joining_date=cells[4].text,
+                status=cells[5].text,
+            ))
+
+    breakpoint()
+    return members
 
 
 def _parse_guild_foundation(paragraphs: List[str]) -> Dict[str, str]:

@@ -6,7 +6,7 @@ from tibiapi.endpoints.guilds.exceptions import GuildNotFound
 
 CHARACTER_URL = "https://www.tibia.com/community/?subtopic=characters&name={name}"
 WORLD_URL = "https://www.tibia.com/community/?subtopic=worlds&world={name}"
-GUILD_URL = "https://www.tibia.com/community/?subtopic=guilds&page=view"
+GUILD_URL = "https://www.tibia.com/community/?subtopic=guilds&page=view&GuildName={guild_name}"
 
 
 async def _get(url: str):
@@ -47,13 +47,13 @@ async def get_world(name: str) -> BeautifulSoup:
 
 
 async def get_guild(name: str) -> BeautifulSoup:
-    response = await _post(GUILD_URL, {"GuildName": name})
+    response = await _get(GUILD_URL.format(guild_name=name))
     response.raise_for_status()
 
     page = BeautifulSoup(response.content, "html.parser")
 
-    has_no_guild_container = page.select_one("#GuildInformationContainer")
-    if has_no_guild_container is None:
-        raise GuildNotFound(name)
+    # has_no_guild_container = page.select_one("#GuildInformationContainer")
+    # if has_no_guild_container is None:
+    #     raise GuildNotFound(name)
 
     return page
