@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
 
 
 class GuildMemberInvite(BaseModel):
     name: str
-    invitation_date: str
+    invitation_date: datetime
 
 
 class GuildMember(BaseModel):

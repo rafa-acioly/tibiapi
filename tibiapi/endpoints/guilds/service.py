@@ -1,4 +1,5 @@
 import re as regex
+from datetime import datetime
 from typing import Dict, List
 
 import tibiapi.tools.strainer as strainer
@@ -107,7 +108,7 @@ async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
 
         invited_members.append(GuildMemberInvite(
             name=cells[0].find("a").text,
-            invitation_date=cells[1].text,
+            invitation_date=datetime.strptime(cells[1].text, "%b %d %Y"),
         ))
 
     return invited_members
