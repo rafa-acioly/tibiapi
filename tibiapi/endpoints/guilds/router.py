@@ -15,6 +15,6 @@ async def find(guild_name: str) -> Guild:
 
 
 @router.get("/{guild_name}/members")
-async def find_members(guild_name: str, online_only: bool = False) -> List[GuildMember]:
+async def find_members(guild_name: str, online: bool = False) -> List[GuildMember]:
     """Find the members of a guild by its name."""
-    return await find_guild_members(guild_name, online_only)
+    return await find_guild_members(guild_name, online)

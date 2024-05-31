@@ -52,40 +52,40 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     """
     Get the members of a guild by its name.
 
-    The table that contains the guild members is a real mess, the first "row"
+    **The table that contains the guild members is a real mess**, the first "row"
     contains the table title, it's not a real row, so we need to skip it.
     The second row contains the table headers along with the
     information of the first member, for now,
     we are going to skip it.
     """
-    # TODO: Find a way to get the first member information without skipping the first row
+    # TODO: Find a way to get the first and second member information without skipping the rows
 
     page = await client.get_guild(guild_name)
 
     members_table = page.select_one(".TableContainer table.Table3")
-    table_rows = members_table.find_all("tr", bgcolor=True)
+    table_rows = members_table.select("tr[bgcolor]") if not online else members_table.select(
+        "tr[bgcolor]:has(td:-soup-contains('online'))")
 
     members: List[GuildMember] = []
     for row in table_rows[2:]:
         cells = row.find_all("td")
-        if len(cells) > 0:
-            cell_content = cells[1].text
+        cell_content = cells[1].text
 
-            # The member name is inside an <a> tag
-            # The title is the text after the member name
-            member_name = cells[1].find("a").text
-            title = cell_content.replace(
-                member_name, "").replace("(", "").replace(")", "")
+        # The member name is inside an <a> tag
+        # The title is the text after the member name
+        member_name = cells[1].find("a").text
+        title = cell_content.replace(
+            member_name, "").replace("(", "").replace(")", "")
 
-            members.append(GuildMember(
-                rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
-                name=cells[1].find("a").text,
-                title=title.strip() if len(title.strip()) > 0 else None,
-                vocation=cells[2].text,
-                level=cells[3].text,
-                joining_date=cells[4].text,
-                status=cells[5].text,
-            ))
+        members.append(GuildMember(
+            rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
+            name=cells[1].find("a").text,
+            title=title.strip() if len(title.strip()) > 0 else None,
+            vocation=cells[2].text,
+            level=cells[3].text,
+            joining_date=cells[4].text,
+            status=cells[5].text,
+        ))
 
     return members
 
