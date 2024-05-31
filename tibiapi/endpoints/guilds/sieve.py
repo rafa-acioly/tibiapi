@@ -1,7 +1,9 @@
 import re as regex
 from typing import Dict, List
 
-from .schemas import GuildHall
+from bs4.element import ResultSet, Tag
+
+from .schemas import GuildHall, GuildMember
 
 
 def extract_guild_foundation(paragraphs: List[str]) -> Dict[str, str]:
@@ -86,3 +88,58 @@ def extract_guild_homepage(paragraphs: List[str]) -> str:
             return match.group(1)
 
     return None
+
+
+def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
+    """
+    Extract the guild members from the guild page table. The second row contains
+    the table headers along with the information of the first member,
+    for now, we are going to skip it.
+    """
+
+    members: List[GuildMember] = []
+
+    # TODO: Find a way to get the first and second member information without skipping the rows
+    for row in tags[2:]:
+        cells = row.find_all("td")
+        cell_content = cells[1].text
+
+        # The member name is inside an <a> tag
+        # The title is the text after the member name
+        member_name = cells[1].find("a").text
+        title = cell_content.replace(
+            member_name, "").replace("(", "").replace(")", "")
+
+        members.append(GuildMember(
+            rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
+            name=cells[1].find("a").text,
+            title=title.strip() if len(title.strip()) > 0 else None,
+            vocation=cells[2].text,
+            level=cells[3].text,
+            joining_date=cells[4].text,
+            status=cells[5].text,
+        ))
+
+    return members
+
+
+def extract_guild_member_invite(tag: Tag) -> List[GuildMember]:
+    """Extract the invited guild members from the guild page table."""
+
+    # The first row is the table header and it has class "LabelH", we need to skip it
+    invitations = tag.select("tr:not(.LabelH)")
+
+    invited_members: List[GuildMember] = []
+    for invitation in invitations[1:]:
+        cells = invitation.find_all("td")
+
+        invited_members.append(GuildMember(
+            name=cells[0].find("a").text,
+            rank=cells[1].text if len(cells[1].text.strip()) > 0 else None,
+            vocation=cells[2].text,
+            level=cells[3].text,
+            invited_by=cells[4].text,
+            date=cells[5].text,
+        ))
+
+    return invited_members

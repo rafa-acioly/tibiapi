@@ -1,12 +1,10 @@
-import re as regex
-from datetime import datetime
 from typing import List
 
 import tibiapi.endpoints.guilds.sieve as sieve
 
 from .client import get_guild
 from .enums import GuildPageIdentifiers
-from .schemas import Guild, GuildHall, GuildMember, GuildMemberInvite
+from .schemas import Guild, GuildMember, GuildMemberInvite
 
 
 async def find_guild(guild_name: str) -> Guild:
@@ -55,11 +53,8 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
 
     **The table that contains the guild members is a real mess**, the first "row"
     contains the table title, it's not a real row, so we need to skip it.
-    The second row contains the table headers along with the
-    information of the first member, for now,
-    we are going to skip it.
+
     """
-    # TODO: Find a way to get the first and second member information without skipping the rows
 
     page = await get_guild(guild_name)
 
@@ -67,28 +62,7 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     table_rows = members_table.select("tr[bgcolor]") if not online else members_table.select(
         "tr[bgcolor]:has(td:-soup-contains('online'))")
 
-    members: List[GuildMember] = []
-    for row in table_rows[2:]:
-        cells = row.find_all("td")
-        cell_content = cells[1].text
-
-        # The member name is inside an <a> tag
-        # The title is the text after the member name
-        member_name = cells[1].find("a").text
-        title = cell_content.replace(
-            member_name, "").replace("(", "").replace(")", "")
-
-        members.append(GuildMember(
-            rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
-            name=cells[1].find("a").text,
-            title=title.strip() if len(title.strip()) > 0 else None,
-            vocation=cells[2].text,
-            level=cells[3].text,
-            joining_date=cells[4].text,
-            status=cells[5].text,
-        ))
-
-    return members
+    return sieve.extract_guild_members(table_rows)
 
 
 async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
@@ -99,16 +73,4 @@ async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
     invitation_container = page.select(".TableContentContainer")
     invitation_table = invitation_container[len(invitation_container) - 4]
 
-    # The first row is the table header and it has class "LabelH", we need to skip it
-    invitations = invitation_table.select("tr:not(.LabelH)")
-
-    invited_members: List[GuildMemberInvite] = []
-    for invitation in invitations:
-        cells = invitation.find_all("td")
-
-        invited_members.append(GuildMemberInvite(
-            name=cells[0].find("a").text,
-            invitation_date=datetime.strptime(cells[1].text, "%b %d %Y"),
-        ))
-
-    return invited_members
+    return sieve.extract_guild_member_invite(invitation_table)
