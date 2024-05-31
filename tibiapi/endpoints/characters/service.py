@@ -1,7 +1,7 @@
 import re as regex
 from typing import List
 
-import tibiapi.tools.strainer as strainer
+import tibiapi.tools.sieve as sieve
 
 from .client import get_character
 from .enums import CharacterPageIdentifiers
@@ -16,7 +16,7 @@ async def get_character(character_name: str) -> Character:
 
     page_tables = await _get_character_page_tables(character_name)
 
-    return strainer.extract_basic_information(page_tables)
+    return sieve.extract_basic_information(page_tables)
 
 
 async def get_characters(character_name: str) -> List[Characters]:
@@ -27,7 +27,7 @@ async def get_characters(character_name: str) -> List[Characters]:
 
     page_tables = await _get_character_page_tables(character_name)
 
-    return strainer.extract_characters(page_tables)
+    return sieve.extract_characters(page_tables)
 
 
 async def get_achievements(character_name: str) -> List[Achievements]:
@@ -38,7 +38,7 @@ async def get_achievements(character_name: str) -> List[Achievements]:
 
     page_tables = await _get_character_page_tables(character_name)
 
-    return strainer.extract_achievements(page_tables)
+    return sieve.extract_achievements(page_tables)
 
 
 async def _get_character_page_tables(character_name: str):
