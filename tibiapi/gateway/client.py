@@ -52,8 +52,8 @@ async def get_guild(name: str) -> BeautifulSoup:
 
     page = BeautifulSoup(response.content, "html.parser")
 
-    # has_no_guild_container = page.select_one("#GuildInformationContainer")
-    # if has_no_guild_container is None:
-    #     raise GuildNotFound(name)
+    has_no_guild_container = page.select_one("#GuildInformationContainer")
+    if has_no_guild_container is None:
+        raise GuildNotFound(name)
 
     return page
