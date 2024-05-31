@@ -1,6 +1,8 @@
 import httpx
 from bs4 import BeautifulSoup
 
+from tibiapi.endpoints.characters.exceptions import CharacterNotFound
+
 CHARACTER_URL = "https://www.tibia.com/community/?subtopic=characters&name={name}"
 WORLD_URL = "https://www.tibia.com/community/?subtopic=worlds&world={name}"
 GUILD_URL = "https://www.tibia.com/community/?subtopic=guilds&page=view"
@@ -26,7 +28,14 @@ async def get_character(name: str) -> BeautifulSoup:
     response = await _get(CHARACTER_URL.format(name=name))
     response.raise_for_status()
 
-    return BeautifulSoup(response.content, "html.parser")
+    page = BeautifulSoup(response.content, "html.parser")
+
+    has_not_found_text = page.find(
+        "div", text="Could not find character") is not None
+    if has_not_found_text:
+        raise CharacterNotFound(name)
+
+    return page
 
 
 async def get_world(name: str) -> BeautifulSoup:

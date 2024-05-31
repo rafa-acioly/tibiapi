@@ -1,9 +1,11 @@
+import re as regex
 from typing import List
 
 import tibiapi.tools.strainer as strainer
-from tibiapi.endpoints.characters.enums import CharacterPageIdentifiers
-from tibiapi.endpoints.characters.schemas import Achievements, Character, Characters
 from tibiapi.gateway import client
+
+from .enums import CharacterPageIdentifiers
+from .schemas import Achievements, Character, Characters
 
 
 async def get_character(character_name: str) -> Character:
@@ -18,7 +20,7 @@ async def get_character(character_name: str) -> Character:
     return strainer.extract_basic_information(page_tables)
 
 
-async def get_characters(character_name: str):
+async def get_characters(character_name: str) -> List[Characters]:
     """
     Get a list of all characters from a specific player.
     Scrape the Tibia.com website to get the character's information.
