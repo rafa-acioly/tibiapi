@@ -1,6 +1,11 @@
 from pydantic import BaseModel, Field
 
 
+class GuildMemberInvite(BaseModel):
+    name: str
+    invitation_date: str
+
+
 class GuildMember(BaseModel):
     rank: str | None = Field(default=None)
     name: str

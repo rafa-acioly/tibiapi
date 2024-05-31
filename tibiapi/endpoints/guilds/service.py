@@ -6,7 +6,7 @@ from tibiapi.gateway import client
 from tibiapi.tools import slugify
 
 from .enums import GuildPageIdentifiers
-from .schemas import Guild, GuildHall, GuildMember
+from .schemas import Guild, GuildHall, GuildMember, GuildMemberInvite
 
 
 async def find_guild(guild_name: str) -> Guild:
@@ -88,6 +88,29 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
         ))
 
     return members
+
+
+async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
+    """Get the invited members of a guild by its name."""
+
+    page = await client.get_guild(guild_name)
+
+    invitation_container = page.select(".TableContentContainer")
+    invitation_table = invitation_container[len(invitation_container) - 4]
+
+    # The first row is the table header and it has class "LabelH", we need to skip it
+    invitations = invitation_table.select("tr:not(.LabelH)")
+
+    invited_members: List[GuildMemberInvite] = []
+    for invitation in invitations:
+        cells = invitation.find_all("td")
+
+        invited_members.append(GuildMemberInvite(
+            name=cells[0].find("a").text,
+            invitation_date=cells[1].text,
+        ))
+
+    return invited_members
 
 
 def _parse_guild_foundation(paragraphs: List[str]) -> Dict[str, str]:
