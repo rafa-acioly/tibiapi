@@ -9,11 +9,8 @@ from tibiapi.endpoints.characters.schemas import (
     Characters,
     Deaths,
 )
-from tibiapi.endpoints.characters.service import (
-    get_achievements,
-    get_character,
-    get_characters,
-)
+
+from . import service
 
 router = APIRouter()
 
@@ -22,7 +19,7 @@ router = APIRouter()
 @cache_one_day()
 async def find(character_name: str) -> Character:
     """Find a character by his name."""
-    return await get_character(character_name)
+    return await service.get_character(character_name)
 
 
 @cache_one_day()
@@ -32,7 +29,7 @@ async def find(character_name: str) -> Character:
     summary="Get all characters from a specific player.")
 async def find_characters(character_name: str) -> Characters:
     """Get all characters from a specific player."""
-    return await get_characters(character_name)
+    return await service.get_characters(character_name)
 
 
 @cache(expire=300)  # 5 minutes
@@ -42,7 +39,7 @@ async def find_characters(character_name: str) -> Characters:
     summary="Get achievements from a character.")
 async def find_achievements(character_name: str) -> Achievements:
     """Get achievements from a character."""
-    return await get_achievements(character_name)
+    return await service.get_achievements(character_name)
 
 
 @cache(expire=120)  # 2 minutes

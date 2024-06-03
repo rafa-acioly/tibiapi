@@ -1,8 +1,7 @@
 import re as regex
 from typing import List
 
-import tibiapi.tools.sieve as sieve
-
+from . import sieve
 from .client import get_character as get_character_page
 from .enums import CharacterPageIdentifiers
 from .schemas import Achievements, Character, Characters
