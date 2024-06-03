@@ -3,7 +3,7 @@ from typing import List
 
 import tibiapi.tools.sieve as sieve
 
-from .client import get_character
+from .client import get_character as get_character_page
 from .enums import CharacterPageIdentifiers
 from .schemas import Achievements, Character, Characters
 
@@ -49,7 +49,7 @@ async def _get_character_page_tables(character_name: str):
     name "TableContent".
     """
 
-    page = await get_character(character_name)
+    page = await get_character_page(character_name)
 
     return page.find_all(
         "table", {"class": CharacterPageIdentifiers.TABLE_CONTENT.value})
