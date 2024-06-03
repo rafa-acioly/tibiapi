@@ -1,7 +1,8 @@
 from typing import List
 
-from .client import all_worlds
-from .schemas import World
+from . import sieve
+from .client import all_worlds, get_world
+from .schemas import World, WorldDetail
 
 
 async def list_worlds() -> List[World]:
@@ -31,3 +32,13 @@ async def list_worlds() -> List[World]:
         ))
 
     return worlds
+
+
+async def find_world(world_name: str) -> WorldDetail:
+    """Find a world by its name."""
+
+    page = await get_world(world_name)
+
+    world_table = page.select(".TableContainer table")[2].find("table")
+
+    return sieve.extract_world_detail(world_table)
