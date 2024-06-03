@@ -5,7 +5,6 @@ from fastapi_redis_cache import cache, cache_one_day
 
 from tibiapi.endpoints.characters.schemas import (
     Achievements,
-    Badges,
     Character,
     Characters,
     Deaths,
@@ -44,16 +43,6 @@ async def find_characters(character_name: str) -> Characters:
 async def find_achievements(character_name: str) -> Achievements:
     """Get achievements from a character."""
     return await get_achievements(character_name)
-
-
-@cache(expire=10800)  # 3 hours
-@router.get(
-    "/{character_name}/badges",
-    response_model=List[Badges],
-    summary="Get badges from a character.")
-async def find_badges(character_name: str) -> Badges:
-    """Get badges from a character."""
-    return {"character_name": character_name}
 
 
 @cache(expire=120)  # 2 minutes

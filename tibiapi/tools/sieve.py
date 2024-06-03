@@ -4,12 +4,7 @@ from typing import List
 from bs4 import ResultSet
 
 from tibiapi.endpoints.characters.enums import CharacterPageIdentifiers
-from tibiapi.endpoints.characters.schemas import (
-    Achievements,
-    Badges,
-    Character,
-    Characters,
-)
+from tibiapi.endpoints.characters.schemas import Achievements, Character, Characters
 from tibiapi.tools import slugify
 
 
@@ -90,25 +85,6 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
             grade=grade, name=name_column.text, secret=len(secrets) > 0))
 
     return mapped_achievements
-
-
-def extract_badges(content: ResultSet, char: Character) -> Character:
-    """
-    Extract the badge's information from character's page.
-    The second table is the badges' information,
-    sometimes this table is hidden in case on a
-    character has no badges.
-    """
-
-    badges_table = content[1]
-    badges: List[Badges] = []
-    for badge in badges_table.find_all("img"):
-        name, image = badge['alt'], badge['src']
-        badges.append(Badges(name=name, icon_url=image))
-
-    char.badges = badges
-
-    return char
 
 
 def extract_characters(content: ResultSet) -> List[Characters]:

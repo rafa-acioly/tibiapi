@@ -3,11 +3,6 @@ from typing import List
 from pydantic import BaseModel, Field
 
 
-class Badges(BaseModel):
-    name: str
-    icon_url: str
-
-
 class Information(BaseModel):
     created: str
     loyalty_title: str
