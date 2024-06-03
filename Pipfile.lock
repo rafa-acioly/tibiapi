@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f96174504aa835f01098c11b1ca9d135b88444f54e3ab340a46416ef202566c6"
+            "sha256": "89c55358dfe2f339ffc7a8aff2ef5f4e94fef6cba7f3c22b3cdb88377f112335"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -100,13 +100,9 @@
             "version": "==0.110.3"
         },
         "fastapi-redis-cache": {
-            "hashes": [
-                "sha256:150f14d0a97ce50ab56b7380fb78a1548318059b9158c1d438a61f1645b8ecc2",
-                "sha256:fc95268c7340bf8ff7e16d114cbaf8627b793261f02dd8b41feb703e5f06d321"
-            ],
-            "index": "pypi",
+            "git": "git+https://github.com/rafa-acioly/fastapi-redis-cache.git",
             "markers": "python_version >= '3.7'",
-            "version": "==0.2.5"
+            "ref": "b6a87557f0ce2f4027dba864dbdc6753f83cee2b"
         },
         "flake8": {
             "hashes": [
