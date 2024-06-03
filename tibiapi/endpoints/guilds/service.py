@@ -1,10 +1,10 @@
-import re as regex
-from typing import Dict, List
+from typing import List
 
-from tibiapi.gateway import client
-from tibiapi.tools import slugify
+import tibiapi.endpoints.guilds.sieve as sieve
 
-from .schemas import Guild, GuildHall
+from .client import get_guild
+from .enums import GuildPageIdentifiers
+from .schemas import Guild, GuildMember, GuildMemberInvite
 
 
 async def find_guild(guild_name: str) -> Guild:
@@ -27,103 +27,50 @@ async def find_guild(guild_name: str) -> Guild:
     The guild information is split by new lines and the information is
     extracted from the text.
     """
-    page = await client.get_guild(guild_name)
 
-    guild_info_container = page.select_one("#GuildInformationContainer")
+    page = await get_guild(guild_name)
+
+    guild_info_container = page.select_one(
+        GuildPageIdentifiers.INFORMATION_CONTAINER.value)
     guild_paragraphs = guild_info_container.text.split("\n")
 
-    world, foundation_date = _parse_guild_foundation(guild_paragraphs)
+    foundation = sieve.extract_guild_foundation(guild_paragraphs)
 
     return Guild(
         name=guild_name,
-        world=world,
-        active=_parse_guild_status(guild_paragraphs),
-        open_applications=_parse_guild_application(guild_paragraphs),
-        guild_hall=_parse_guild_hall(guild_paragraphs),
-        foundation_date=foundation_date,
-        homepage=_parse_guild_homepage(guild_paragraphs),
+        world=foundation["world"],
+        active=sieve.extract_guild_status(guild_paragraphs),
+        open_applications=sieve.extract_guild_application(guild_paragraphs),
+        guild_hall=sieve.extract_guild_hall(guild_paragraphs),
+        foundation_date=foundation["foundation_date"],
+        homepage=sieve.extract_guild_homepage(guild_paragraphs),
     )
 
 
-def _parse_guild_foundation(paragraphs: List[str]) -> Dict[str, str]:
+async def find_guild_members(guild_name: str, online: bool | None = False) -> List[GuildMember]:
     """
-    Parse the foundation date from the guild information.
+    Get the members of a guild by its name.
 
-    The foundation date is in the following format:
-    "The guild was founded on {{ server }} on {{ date }}."
-    """
+    **The table that contains the guild members is a real mess**, the first "row"
+    contains the table title, it's not a real row, so we need to skip it.
 
-    for paragraph in paragraphs:
-        if paragraph.startswith("The guild was founded"):
-            pattern = r"on (\w+) on (.+)\."
-            match = regex.search(pattern, paragraph)
-
-            return {"world": match.group(1), "foundation_date": match.group(2)}
-
-
-def _parse_guild_hall(paragraphs: List[str]) -> GuildHall:
-    """
-    Parse the guild hall information from the guild information.
-    The guild hall information contains the world, the name of the guild hall,
-    and the date until the rent is paid.
-
-    The guild hall information is in the following format:
-    "Their home on {{ server }} is {{ guild_hall }}. The rent is paid until {{ date }}"
     """
 
-    for paragraph in paragraphs:
-        if paragraph.startswith("Their home"):
-            pattern = r"is ([^.]+)\. .* until (.+)\.$"
-            match = regex.search(pattern, paragraph)
+    page = await get_guild(guild_name)
 
-            return GuildHall(name=match.group(1), paid_until=match.group(2))
+    members_table = page.select_one(".TableContainer table.Table3")
+    table_rows = members_table.select("tr[bgcolor]") if not online else members_table.select(
+        "tr[bgcolor]:has(td:-soup-contains('online'))")
 
-    return GuildHall()
-
-
-def _parse_guild_status(paragraphs: List[str]) -> bool:
-    """
-    Parse the guild status from the guild information.
-
-    The guild status is in the following format:
-    "It is currently {{ status }}."
-    """
-
-    for paragraph in paragraphs:
-        if paragraph.startswith("It is currently"):
-            return "active" in paragraph
-
-    return False
+    return sieve.extract_guild_members(table_rows)
 
 
-def _parse_guild_application(paragraphs: List[str]) -> bool:
-    """
-    Parse the guild application status from the guild information.
+async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
+    """Get the invited members of a guild by its name."""
 
-    The guild application status is in the following format:
-    "Guild is opened for applications."
-    """
+    page = await get_guild(guild_name)
 
-    for paragraph in paragraphs:
-        if paragraph.startswith("Guild is") and "opened" in paragraph:
-            return True
+    invitation_container = page.select(".TableContentContainer")
+    invitation_table = invitation_container[len(invitation_container) - 4]
 
-    return False
-
-
-def _parse_guild_homepage(paragraphs: List[str]) -> str:
-    """
-    Parse the guild homepage from the guild information.
-
-    The guild homepage is in the following format:
-    "The official homepage is at {{ link }}."
-    """
-
-    for paragraph in paragraphs:
-        if paragraph.startswith("The official homepage"):
-            pattern = r"at (.+)\.$"
-            match = regex.search(pattern, paragraph)
-
-            return match.group(1)
-
-    return None
+    return sieve.extract_guild_member_invite(invitation_table)

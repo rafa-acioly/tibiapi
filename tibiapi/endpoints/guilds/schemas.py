@@ -1,4 +1,21 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
+
+
+class GuildMemberInvite(BaseModel):
+    name: str
+    invitation_date: datetime
+
+
+class GuildMember(BaseModel):
+    rank: str | None = Field(default=None)
+    name: str
+    title: str | None = Field(default=None)
+    vocation: str
+    level: int
+    joining_date: str
+    status: str
 
 
 class GuildHall(BaseModel):
