@@ -1,9 +1,6 @@
-from fastapi import APIRouter, FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response
 from fastapi_redis_cache import FastApiRedisCache
 
-from tibiapi.endpoints.characters.router import router as characters
-from tibiapi.endpoints.guilds.router import router as guilds
-from tibiapi.endpoints.worlds.router import router as worlds
 from tibiapi.routes import api_routes
 from tibiapi.tools.settings import Settings
 
