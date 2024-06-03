@@ -9,7 +9,6 @@ async def list_worlds() -> List[World]:
 
     page = await all_worlds()
 
-    breakpoint()
     worlds_table = page.select(".TableContent")
 
     # The third table contains the list of worlds.
