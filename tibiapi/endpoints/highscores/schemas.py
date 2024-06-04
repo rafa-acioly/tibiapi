@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class HighScoreEntry(BaseModel):
@@ -8,6 +8,7 @@ class HighScoreEntry(BaseModel):
     world: str
     level: int
     points: str
+    title: str | None = Field(default=None)
 
 
 class HighScore(BaseModel):

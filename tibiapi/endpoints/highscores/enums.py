@@ -28,7 +28,7 @@ class HighScoreCategory(str, Enum):
         """
         for i, category in enumerate(list(HighScoreCategory)):
             if category_name == category.value:
-                return i
+                return i - 1
 
 
 class HighScoreVocation(str, Enum):

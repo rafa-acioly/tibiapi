@@ -20,7 +20,6 @@ async def find_highscores(
     }
 
     if any(query.values()):
-        breakpoint()
         page = await retrieve_highscores(query)
     else:
         page = await get_highscore()
@@ -28,4 +27,4 @@ async def find_highscores(
     table_rows = page.select(
         "tr:has(a[href*='subtopic=characters&name'])")
 
-    return sieve.extract_players_highscore(table_rows)
+    return sieve.extract_players_highscore(category, table_rows)

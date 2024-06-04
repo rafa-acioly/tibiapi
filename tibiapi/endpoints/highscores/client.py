@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 
 from tibiapi.gateway.client import get_page, post_on_page
 
-from .enums import HighScoreCategory, HighScoreVocation, HighScoreWorld
-
 HIGHSCORE_URL = "https://www.tibia.com/community/?subtopic=highscores"
 
 
