@@ -2,13 +2,14 @@ from pydantic import BaseModel
 
 
 class HighScoreEntry(BaseModel):
-    name: str
-    level: int
-    vocation: str
     rank: int
-    title: str
+    name: str
+    vocation: str
     world: str
+    level: int
+    points: int
 
 
 class HighScore(BaseModel):
-    pass
+    scores: list[HighScoreEntry]
+    pagination: dict[str, int]

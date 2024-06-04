@@ -3,6 +3,7 @@ from fastapi_redis_cache import cache_one_hour
 
 from . import service
 from .enums import HighScoreCategory, HighScoreVocation, HighScoreWorld
+from .schemas import HighScore
 
 router = APIRouter()
 
@@ -13,5 +14,5 @@ async def find(
     world_name: HighScoreWorld = None,
     vocation: HighScoreVocation = HighScoreVocation.NONE,
     category: HighScoreCategory = None
-):
+) -> HighScore:
     return await service.find_highscores(world_name.title(), vocation, category)
