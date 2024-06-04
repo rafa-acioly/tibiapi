@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN apt-get update && apt-get install git -y
+
 RUN pip install pipenv && pipenv install --system --deploy
 
 EXPOSE 8080
