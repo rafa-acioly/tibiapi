@@ -14,11 +14,16 @@ async def find_highscores(
     """
 
     query = {
-        "world_name": world_name.title() if world_name else None,
-        "vocation": HighScoreVocation.numericOf(vocation),
+        "world": world_name.title() if world_name else None,
+        "profession": HighScoreVocation.numericOf(vocation),
         "category": HighScoreCategory.numericOf(category)
     }
-    page = get_highscore() if any(query.values()) else await retrieve_highscores(query)
+
+    if any(query.values()):
+        breakpoint()
+        page = await retrieve_highscores(query)
+    else:
+        page = await get_highscore()
 
     table_rows = page.select(
         "tr:has(a[href*='subtopic=characters&name'])")

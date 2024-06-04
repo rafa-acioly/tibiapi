@@ -2,21 +2,21 @@ from enum import Enum, IntEnum, auto
 
 
 class HighScoreCategory(str, Enum):
-    ACHIEVEMENTE = "ACHIEVEMENTE"
-    AXE_FIGHTING = "AXE_FIGHTING"
-    BOSS_POINTS = "BOSS_POINTS"
-    CHARM_POINTS = "CHARM_POINTS"
-    CLUB_FIGHTING = "CLUB_FIGHTING"
-    DISTANCE_FIGHTING = "DISTANCE_FIGHTING"
-    DROME_SCORE = "DROME_SCORE"
-    EXPERIENCE_POINTS = "EXPERIENCE_POINTS"
-    FISHING = "FISHING"
-    FIST_FIGHTING = "FIST_FIGHTING"
-    GOSHNARS_TAINT = "GOSHNARS_TAINT"
-    LOYALTY_POINTS = "LOYALTY_POINTS"
-    MAGIC_LEVEL = "MAGIC_LEVEL"
-    SHIELDING = "SHIELDING"
-    SWORD_FIGHTING = "SWORD_FIGHTING"
+    ACHIEVEMENTS = "Achievements"
+    AXE_FIGHTING = "Axe Fighting"
+    BOSS_POINTS = "Boss Points"
+    CHARM_POINTS = "Charm Points"
+    CLUB_FIGHTING = "Club Fighting"
+    DISTANCE_FIGHTING = "Distance Fighting"
+    DROME_SCORE = "Drome Score"
+    EXPERIENCE_POINTS = "Experience Points"
+    FISHING = "Fishing"
+    FIST_FIGHTING = "Fist Fighting"
+    GOSHNARS_TAINT = "Goshnar's Taint"
+    LOYALTY_POINTS = "Loyalty Points"
+    MAGIC_LEVEL = "Magic Level"
+    SHIELDING = "Shielding"
+    SWORD_FIGHTING = "Sword Fighting"
 
     @classmethod
     def numericOf(cls, category_name: str) -> int | None:
@@ -32,11 +32,11 @@ class HighScoreCategory(str, Enum):
 
 
 class HighScoreVocation(str, Enum):
-    NONE = "NONE"
-    KNIGHTS = "KNIGHTS"
-    PALADINS = "PALADINS"
-    SORCERERS = "SORCERERS"
-    DRUIDS = "DRUIDS"
+    NONE = "None"
+    KNIGHTS = "Knight"
+    PALADINS = "Paladin"
+    SORCERERS = "Sorcerer"
+    DRUIDS = "Druid"
 
     @classmethod
     def numericOf(cls, vocation_name: str) -> int | None:
@@ -48,7 +48,9 @@ class HighScoreVocation(str, Enum):
         """
         for i, vocation in enumerate(list(HighScoreVocation)):
             if vocation_name == vocation.value:
-                return i
+                # The count starts from 1, the 0 value is for "ALL"
+                # None represents characters without vocation (rookers)
+                return i + 1
 
 
 class HighScoreWorld(str, Enum):

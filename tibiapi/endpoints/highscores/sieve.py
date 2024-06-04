@@ -2,7 +2,7 @@ from bs4.element import ResultSet, Tag
 
 from tibiapi.tools import stringify_number
 
-from .schemas import HighScore, HighScoreEntry
+from .schemas import HighScoreEntry
 
 
 def extract_players_highscore(content: ResultSet[Tag]) -> list[HighScoreEntry]:

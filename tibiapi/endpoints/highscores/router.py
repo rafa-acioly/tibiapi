@@ -9,7 +9,6 @@ router = APIRouter()
 
 
 @router.get("", summary="Get highscores")
-@cache_one_hour()
 async def index(
     world_name: HighScoreWorld = None,
     vocation: HighScoreVocation = None,
