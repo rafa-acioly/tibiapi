@@ -14,6 +14,7 @@ fastapi = "*"
 pydantic-settings = "*"
 fastapi-redis-cache = {ref = "v0.3", git = "git+https://github.com/rafa-acioly/fastapi-redis-cache.git"}
 httpx = "==0.27.0"
+sentry-sdk = {extras = ["fastapi"], version = "*"}
 
 [dev-packages]
 isort = "==4.2.15"
