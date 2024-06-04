@@ -26,9 +26,9 @@ class HighScoreCategory(str, Enum):
         name to a number, the Enum is already ordered
         in the same order.
         """
-        for i, category in enumerate(list(HighScoreCategory)):
+        for i, category in enumerate(list(HighScoreCategory), start=1):
             if category_name == category.value:
-                return i - 1
+                return i
 
 
 class HighScoreVocation(str, Enum):
@@ -46,97 +46,6 @@ class HighScoreVocation(str, Enum):
         name to a number, the Enum is already ordered
         in the same order.
         """
-        for i, vocation in enumerate(list(HighScoreVocation)):
+        for i, vocation in enumerate(list(HighScoreVocation), start=1):
             if vocation_name == vocation.value:
-                # The count starts from 1, the 0 value is for "ALL"
-                # None represents characters without vocation (rookers)
-                return i + 1
-
-
-class HighScoreWorld(str, Enum):
-    ANTICA = "Antica"
-    ASTERA = "Astera"
-    AXERA = "Axera"
-    BELOBRA = "Belobra"
-    BOMBRA = "Bombra"
-    BONA = "Bona"
-    CALMERA = "Calmera"
-    CASTELA = "Castela"
-    CELEBRA = "Celebra"
-    CELESTA = "Celesta"
-    COLLABRA = "Collabra"
-    DAMORA = "Damora"
-    DESCUBRA = "Descubra"
-    DIA = "Dia"
-    EPOCA = "Epoca"
-    ESMERA = "Esmera"
-    ETEBRA = "Etebra"
-    FEROBRA = "Ferobra"
-    FIRMERA = "Firmera"
-    FLAMERA = "Flamera"
-    GENTEBRA = "Gentebra"
-    GLADERA = "Gladera"
-    GRAVITERA = "Gravitera"
-    GUERRIBRA = "Guerribra"
-    HARMONIA = "Harmonia"
-    HAVERA = "Havera"
-    HONBRA = "Honbra"
-    IMPULSA = "Impulsa"
-    INABRA = "Inabra"
-    ISSOBRA = "Issobra"
-    JACABRA = "Jacabra"
-    JADEBRA = "Jadebra"
-    JAGUNA = "Jaguna"
-    KALIBRA = "Kalibra"
-    KARDERA = "Kardera"
-    KENDRIA = "Kendria"
-    LOBERA = "Lobera"
-    LUMINERA = "Luminera"
-    LUTABRA = "Lutabra"
-    MENERA = "Menera"
-    MONZA = "Monza"
-    MYKERA = "Mykera"
-    NADORA = "Nadora"
-    NEFERA = "Nefera"
-    NEVIA = "Nevia"
-    OBSCUBRA = "Obscubra"
-    OCEANIS = "Oceanis"
-    OMBRA = "Ombra"
-    OUSABRA = "Ousabra"
-    PACERA = "Pacera"
-    PELORIA = "Peloria"
-    PREMIA = "Premia"
-    PULSERA = "Pulsera"
-    QUELIBRA = "Quelibra"
-    QUINTERA = "Quintera"
-    RASTEIBRA = "Rasteibra"
-    REFUGIA = "Refugia"
-    RETALIA = "Retalia"
-    RUNERA = "Runera"
-    SECURA = "Secura"
-    SERDEBRA = "Serdebra"
-    SOLIDERA = "Solidera"
-    STRALIS = "Stralis"
-    SYRENA = "Syrena"
-    TALERA = "Talera"
-    THYRIA = "Thyria"
-    TORNABRA = "Tornabra"
-    ULERA = "Ulera"
-    UNEBRA = "Unebra"
-    USTEBRA = "Ustebra"
-    UTOBRA = "Utobra"
-    VANDERA = "Vandera"
-    VENEBRA = "Venebra"
-    VICTORIS = "Victoris"
-    VITERA = "Vitera"
-    VUNIRA = "Vunira"
-    WADIRA = "Wadira"
-    WILDERA = "Wildera"
-    WINTERA = "Wintera"
-    YARA = "Yara"
-    YONABRA = "Yonabra"
-    YOVERA = "Yovera"
-    YUBRA = "Yubra"
-    ZEPHYRA = "Zephyra"
-    ZUNA = "Zuna"
-    Zunera = "Zunera"
+                return i
