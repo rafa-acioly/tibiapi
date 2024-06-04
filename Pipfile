@@ -14,7 +14,7 @@ isort = "==4.2.15"
 vcrpy = "==4.2.1"
 fastapi = "*"
 pydantic-settings = "*"
-fastapi-redis-cache = {ref = "v0.1", git = "git+https://github.com/rafa-acioly/fastapi-redis-cache.git"}
+fastapi-redis-cache = {ref = "v0.2", git = "git+https://github.com/rafa-acioly/fastapi-redis-cache.git"}
 
 [dev-packages]
 pytest = "==3.6.3"
