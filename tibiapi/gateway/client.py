@@ -9,7 +9,7 @@ async def get_page(url: str):
         return await client.get(url)
 
 
-async def _post(url: str, params: dict):
+async def post_on_page(url: str, params: dict):
     """
     Some pages require POST parameters to be sent in order to be accessed.
     """

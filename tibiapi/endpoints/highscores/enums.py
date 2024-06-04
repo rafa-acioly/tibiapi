@@ -137,16 +137,4 @@ class HighScoreWorld(str, Enum):
     YUBRA = "Yubra"
     ZEPHYRA = "Zephyra"
     ZUNA = "Zuna"
-    Zunera = "ZUNERA"
-
-    @classmethod
-    def numericOf(cls, world_name: str) -> int | None:
-        """
-        Convert a category name to its numeric value. Tibia website accept
-        only numbers as category, so we need to convert the category
-        name to a number, the Enum is already ordered
-        in the same order.
-        """
-        for i, world in enumerate(list(HighScoreWorld)):
-            if world_name == world.value:
-                return i
+    Zunera = "Zunera"
