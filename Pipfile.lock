@@ -1,11 +1,7 @@
 {
     "_meta": {
         "hash": {
-<<<<<<< HEAD
-            "sha256": "8032befa75cd7af36cc85307be0d19d29bfa83855c764857f687bdbf7ff55502"
-=======
-            "sha256": "ce76a804daf37d4c1921b8662362de5c31acde43adfd2e1d9ad3021dd12a4a9d"
->>>>>>> 31418cf (feat: add endpoint for highscore)
+            "sha256": "a437dbc5da0f5ec9ea8caac7afe18c759e97f1a35f2f93eaea09e763ff99ac05"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -87,9 +83,6 @@
             "version": "==2.1.1"
         },
         "fastapi": {
-            "extras": [
-                "all"
-            ],
             "hashes": [
                 "sha256:97ecbf994be0bcbdadedf88c3150252bed7b2087075ac99735403b1b76cc8fc0",
                 "sha256:b9db9dd147c91cb8b769f7183535773d8741dd46f9dc6676cd82eab510228cd7"
