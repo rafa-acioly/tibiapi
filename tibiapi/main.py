@@ -1,6 +1,8 @@
 import sentry_sdk
 from fastapi import FastAPI, Request, Response
 from fastapi_redis_cache import FastApiRedisCache
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
 
 from tibiapi.routes import api_routes
 from tibiapi.tools.settings import Settings
@@ -24,4 +26,8 @@ def startup():
         dsn=settings.SENTRY_DSN,
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
+        integrations=[
+            StarletteIntegration(transaction_style="endpoint"),
+            FastApiIntegration(transaction_style="endpoint")
+        ]
     )
