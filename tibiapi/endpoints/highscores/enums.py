@@ -4,11 +4,9 @@ from enum import Enum, IntEnum, auto
 class HighScoreCategory(str, Enum):
     ACHIEVEMENTS = "Achievements"
     AXE_FIGHTING = "Axe Fighting"
-    BOSS_POINTS = "Boss Points"
     CHARM_POINTS = "Charm Points"
     CLUB_FIGHTING = "Club Fighting"
     DISTANCE_FIGHTING = "Distance Fighting"
-    DROME_SCORE = "Drome Score"
     EXPERIENCE_POINTS = "Experience Points"
     FISHING = "Fishing"
     FIST_FIGHTING = "Fist Fighting"
@@ -16,7 +14,9 @@ class HighScoreCategory(str, Enum):
     LOYALTY_POINTS = "Loyalty Points"
     MAGIC_LEVEL = "Magic Level"
     SHIELDING = "Shielding"
+    DROME_SCORE = "Drome Score"
     SWORD_FIGHTING = "Sword Fighting"
+    BOSS_POINTS = "Boss Points"
 
     @classmethod
     def numericOf(cls, category_name: str) -> int | None:
