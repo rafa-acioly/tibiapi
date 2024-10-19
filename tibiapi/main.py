@@ -1,4 +1,3 @@
-import sentry_sdk
 from fastapi import FastAPI, Request, Response
 from fastapi_redis_cache import FastApiRedisCache
 from sentry_sdk.integrations.fastapi import FastApiIntegration
@@ -22,12 +21,3 @@ def startup():
         ignore_arg_types=[Request, Response]
     )
 
-    sentry_sdk.init(
-        dsn=settings.SENTRY_DSN,
-        traces_sample_rate=1.0,
-        profiles_sample_rate=1.0,
-        integrations=[
-            StarletteIntegration(transaction_style="endpoint"),
-            FastApiIntegration(transaction_style="endpoint")
-        ]
-    )

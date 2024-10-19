@@ -1,31 +1,25 @@
 from typing import List
 
-from bs4 import ResultSet
+from bs4 import ResultSet, Tag
 
 from tibiapi.tools.sieve import extract_table_information
 
 from .enums import CharacterPageIdentifiers
-from .schemas import Achievements, Character, Characters
+from .schemas import Achievements, Character, Characters, Deaths
 
 
-def extract_basic_information(content: ResultSet) -> Character:
+def extract_basic_information(content: Tag) -> Character:
     """
     Extract basic information from the character's page, the
     basic information are name, sex, vocation and etc.
     """
 
-    char_info_table = content[0]
-    account_info_table = content[2]
+    char_info = extract_table_information(content)
 
-    char_info = extract_table_information(char_info_table)
-    account_info = extract_table_information(account_info_table)
-
-    char = char_info | account_info
-
-    return Character(**char)
+    return Character(**char_info)
 
 
-def extract_achievements(content: ResultSet) -> List[Achievements]:
+def extract_achievements(content: Tag) -> List[Achievements]:
     """
     Extract achievements from the character's page.
     The third table is the achievements, some
@@ -33,8 +27,7 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
     have a special HTML element on it.
     """
 
-    achievements = content[1]
-    rows = zip(*(iter(achievements.find_all("td")),) * 2)
+    rows = zip(*(iter(content.find_all("td")),) * 2)
 
     mapped_achievements = []
     for row in rows:
@@ -57,7 +50,7 @@ def extract_achievements(content: ResultSet) -> List[Achievements]:
     return mapped_achievements
 
 
-def extract_characters(content: ResultSet) -> List[Characters]:
+def extract_characters(content: Tag) -> List[Characters]:
     """
     Extract a list of characters from the player's page.
     The second to last table is the list of
@@ -68,11 +61,10 @@ def extract_characters(content: ResultSet) -> List[Characters]:
     # the table is the forth from last in the HTML content.
     # The last tables (after the fourth) are the footer of the page,
     # and the cookies disclaimer.
-    characters_table = content[len(content) - 4]
     characters: List[Characters] = []
 
     # Ignore the first row of the table, this row contains the table headers.
-    for char in characters_table.find_all("tr")[1:]:
+    for char in content.find_all("tr")[1:]:
         # The "_" variable is used to ignore the last column
         # of the table, this column is a button to view
         # the character's information.
@@ -93,3 +85,19 @@ def extract_characters(content: ResultSet) -> List[Characters]:
             name=name, world=world_column.text, main=main, status=status))
 
     return characters
+
+
+def extract_deaths(content: Tag) -> List[Deaths]:
+    breakpoint()
+    
+    death: List[Deaths] = []
+    for deaths in content.find_all("tr"):
+        death_date, death_cause = deaths.find_all("td")
+
+        breakpoint()
+        killers_tag = death_cause.find_all("a")
+        killers = [killer.text for killer in killers_tag]
+
+        death.append(Deaths(date=death_date.text, killers=killers))
+    
+    return death

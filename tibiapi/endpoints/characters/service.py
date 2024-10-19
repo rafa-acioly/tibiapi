@@ -1,10 +1,9 @@
-import re as regex
 from typing import List
+from bs4 import Tag
 
 from . import sieve
 from .client import get_character as get_character_page
-from .enums import CharacterPageIdentifiers
-from .schemas import Achievements, Character, Characters
+from .schemas import Achievements, Character, Characters, Deaths
 
 
 async def get_character(character_name: str) -> Character:
@@ -13,10 +12,11 @@ async def get_character(character_name: str) -> Character:
     Scrape the Tibia.com website to get the character's information.
     """
 
-    page_tables = await _get_character_page_tables(character_name)
+    char_content = await _get_character_page_tables(
+        character_name=character_name,
+        section="Character Information")
 
-    return sieve.extract_basic_information(page_tables)
-
+    return sieve.extract_basic_information(char_content)
 
 async def get_characters(character_name: str) -> List[Characters]:
     """
@@ -24,10 +24,11 @@ async def get_characters(character_name: str) -> List[Characters]:
     Scrape the Tibia.com website to get the character's information.
     """
 
-    page_tables = await _get_character_page_tables(character_name)
+    table_content = await _get_character_page_tables(
+        character_name=character_name,
+        section="Characters")
 
-    return sieve.extract_characters(page_tables)
-
+    return sieve.extract_characters(table_content)
 
 async def get_achievements(character_name: str) -> List[Achievements]:
     """
@@ -35,12 +36,28 @@ async def get_achievements(character_name: str) -> List[Achievements]:
     Scrape the Tibia.com website to get the character's achievements.
     """
 
-    page_tables = await _get_character_page_tables(character_name)
+    table_content = await _get_character_page_tables(
+        character_name=character_name,
+        section="Account Achievements")
 
-    return sieve.extract_achievements(page_tables)
+    return sieve.extract_achievements(table_content)
 
+async def get_deaths(character_name: str) -> List[Deaths]:
+    """
+    Get deaths from a character.
+    Scrape the Tibia.com website to get the character's deaths.
+    """
 
-async def _get_character_page_tables(character_name: str):
+    table_content = await _get_character_page_tables(
+        character_name=character_name,
+        section="Character Deaths")
+
+    if not table_content:
+        return []
+
+    return sieve.extract_deaths(table_content)
+
+async def _get_character_page_tables(character_name: str, section: str) -> Tag:
     """
     Get the character's page tables.
     The page tables are the HTML tables that contain the character's information,
@@ -48,7 +65,14 @@ async def _get_character_page_tables(character_name: str):
     name "TableContent".
     """
 
+    breakpoint()
     page = await get_character_page(character_name)
+    section_div = page.find("div", class_="Text", string=section)
 
-    return page.find_all(
-        "table", {"class": CharacterPageIdentifiers.TABLE_CONTENT.value})
+    if not section_div:
+        return None
+
+    table_conteiner = section_div.find_parent("div", class_="TableContainer")
+    table_content = table_conteiner.find("table", class_="TableContent")
+
+    return table_content

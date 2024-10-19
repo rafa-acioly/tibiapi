@@ -19,23 +19,9 @@ class Guild(BaseModel):
     rank: str
 
 
-class DeathAssist(BaseModel):
-    name: str
-    player: str
-    summon: str
-    traded: bool
-
-
-class DeathKiller(BaseModel):
-    name: str
-    player: str
-    summon: str
-    traded: bool
-
-
 class Deaths(BaseModel):
-    assists: List[DeathAssist]
-    killers: List[DeathKiller]
+    date: str
+    killers: List[str] = []
 
 
 class Characters(BaseModel):
@@ -64,7 +50,9 @@ class Character(BaseModel):
     traded: bool = Field(default=False)
     unlocked_titles: int = Field(default=0)
     guild_membership: str | None = Field(default=None)
-    account_information: Information | None = Field(default=None)
+
+    # TODO: Buscar informação em outra div
+    # account_information: Information | None = Field(default=None)
 
     def to_dict(self):
         return self.model_dump_json()

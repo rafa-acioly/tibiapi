@@ -44,9 +44,9 @@ async def find_achievements(character_name: str) -> Achievements:
 
 @router.get(
     "/{character_name}/deaths",
-    response_model=Deaths,
+    response_model=List[Deaths],
     summary="Get deaths from a character.")
 @cache(expire=120)  # 2 minutes
-async def find_deaths(character_name: str) -> Deaths:
+async def find_deaths(character_name: str) -> List[Deaths]:
     """Get deaths from a character."""
-    return {"character_name": character_name}
+    return await service.get_deaths(character_name)

@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 
 from tibiapi.gateway.client import get_page
+from fastapi_redis_cache import cache_one_hour
 
 from .exceptions import CharacterNotFound
 
 CHARACTER_URL = "https://www.tibia.com/community/?subtopic=characters&name={name}"
 
 
+@cache_one_hour()
 async def get_character(name: str) -> BeautifulSoup:
     """Retrieve the character page by its name."""
 
