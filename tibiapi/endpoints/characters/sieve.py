@@ -1,6 +1,7 @@
+import re
 from typing import List
 
-from bs4 import ResultSet, Tag
+from bs4 import Tag
 
 from tibiapi.tools.sieve import extract_table_information
 
@@ -46,7 +47,7 @@ def extract_achievements(content: Tag) -> List[Achievements]:
         )
 
         mapped_achievements.append(
-            Achievements(grade=grade, name=name_column.string, secret=len(secrets) > 0)
+            Achievements(grade=grade, name=name_column.text, secret=len(secrets) > 0)
         )
 
     return mapped_achievements
@@ -100,8 +101,12 @@ def extract_deaths(content: Tag) -> List[Deaths]:
         death_date, death_cause = deaths.find_all("td")
 
         killers_tag = death_cause.find_all("a")
-        killers = [killer.text for killer in killers_tag]
+        pk_names = [killer.text for killer in killers_tag]
 
-        death.append(Deaths(date=death_date.text, killers=killers))
+        regex = re.match(r"^Killed at Level (\d+)", death_cause.text)
+
+        death.append(
+            Deaths(date=death_date.text, death_level=regex.group(1), pk_names=pk_names)
+        )
 
     return death

@@ -1,6 +1,7 @@
 from typing import List
 
 from bs4 import Tag
+from fastapi_redis_cache import cache_one_hour
 
 from . import sieve
 from .client import get_character as get_character_page
@@ -83,6 +84,7 @@ async def get_deaths(character_name: str) -> List[Deaths]:
     return sieve.extract_deaths(table_content)
 
 
+@cache_one_hour()
 async def _get_page_section(character_name: str, section: str) -> Tag | None:
     """
     Get the character's page section.
