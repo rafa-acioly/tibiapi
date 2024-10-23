@@ -8,37 +8,52 @@ from .schemas import Achievements, Character, Characters, Deaths
 
 async def get_character(character_name: str) -> Character:
     """
-    Get a character by his name.
-    Scrape the Tibia.com website to get the character's information.
+    Get a character basic informatiom by his name.
+    The character information is always displayed in the character's page.
     """
 
-    char_content = await _get_character_page_tables(
+    section_header = await _get_page_section(
         character_name=character_name,
         section="Character Information")
+    
+    table_conteiner = section_header.find_parent("div", class_="TableContainer")
+    table_content = table_conteiner.find("table", class_="TableContent")
 
-    return sieve.extract_basic_information(char_content)
+    return sieve.extract_basic_information(table_content)
 
 async def get_characters(character_name: str) -> List[Characters]:
     """
     Get a list of all characters from a specific player.
-    Scrape the Tibia.com website to get the character's information.
+    The characters list are always displayed in the character's page.
     """
 
-    table_content = await _get_character_page_tables(
+    section_header = await _get_page_section(
         character_name=character_name,
         section="Characters")
+
+    if not section_header:
+        return []
+    
+    table_conteiner = section_header.find_parent("div", class_="TableContainer")
+    table_content = table_conteiner.find("table", class_="TableContent")
 
     return sieve.extract_characters(table_content)
 
 async def get_achievements(character_name: str) -> List[Achievements]:
     """
     Get achievements from a character.
-    Scrape the Tibia.com website to get the character's achievements.
+    The achievements is always displayed in the character's page.
     """
 
-    table_content = await _get_character_page_tables(
+    section_header = await _get_page_section(
         character_name=character_name,
         section="Account Achievements")
+    
+    if not section_header:
+        return []
+    
+    table_conteiner = section_header.find_parent("div", class_="TableContainer")
+    table_content = table_conteiner.find("table", class_="TableContent")
 
     return sieve.extract_achievements(table_content)
 
@@ -48,30 +63,28 @@ async def get_deaths(character_name: str) -> List[Deaths]:
     Scrape the Tibia.com website to get the character's deaths.
     """
 
-    table_content = await _get_character_page_tables(
+    section_header = await _get_page_section(
         character_name=character_name,
         section="Character Deaths")
+    
+    if not section_header:
+        return []
+
+    table_conteiner = section_header.find_parent("div", class_="TableContainer")
+    table_content = table_conteiner.find("table", class_="TableContent")
 
     if not table_content:
         return []
 
     return sieve.extract_deaths(table_content)
 
-async def _get_character_page_tables(character_name: str, section: str) -> Tag:
+async def _get_page_section(character_name: str, section: str) -> Tag|None:
     """
-    Get the character's page tables.
-    The page tables are the HTML tables that contain the character's information,
-    such as achievements, deaths, etc. All tables have the same class
-    name "TableContent".
+    Get the character's page section.
+    In order to get the character's information, we need to
+    get the page section where the information is located.
+    When we get the page section, we can extract the information.
     """
 
     page = await get_character_page(character_name)
-    section_div = page.find("div", class_="Text", string=section)
-
-    if not section_div:
-        return None
-
-    table_conteiner = section_div.find_parent("div", class_="TableContainer")
-    table_content = table_conteiner.find("table", class_="TableContent")
-
-    return table_content
+    return page.find("div", class_="Text", string=section)
