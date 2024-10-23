@@ -17,7 +17,7 @@ async def get_character(name: str) -> BeautifulSoup:
 
     page = BeautifulSoup(response.content, "html.parser")
 
-    has_not_found_text = page.find("div", text="Could not find character") is not None
+    has_not_found_text = page.find("div", string="Could not find character") is not None
     if has_not_found_text:
         raise CharacterNotFound(name)
 

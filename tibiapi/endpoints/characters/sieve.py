@@ -46,7 +46,7 @@ def extract_achievements(content: Tag) -> List[Achievements]:
         )
 
         mapped_achievements.append(
-            Achievements(grade=grade, name=name_column.text, secret=len(secrets) > 0)
+            Achievements(grade=grade, name=name_column.string, secret=len(secrets) > 0)
         )
 
     return mapped_achievements
