@@ -88,13 +88,14 @@ def extract_characters(content: Tag) -> List[Characters]:
 
 
 def extract_deaths(content: Tag) -> List[Deaths]:
-    breakpoint()
+    """
+    Extract deaths from the character's page.
+    """
     
     death: List[Deaths] = []
     for deaths in content.find_all("tr"):
         death_date, death_cause = deaths.find_all("td")
 
-        breakpoint()
         killers_tag = death_cause.find_all("a")
         killers = [killer.text for killer in killers_tag]
 

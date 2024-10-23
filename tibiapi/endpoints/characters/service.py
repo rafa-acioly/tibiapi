@@ -65,7 +65,6 @@ async def _get_character_page_tables(character_name: str, section: str) -> Tag:
     name "TableContent".
     """
 
-    breakpoint()
     page = await get_character_page(character_name)
     section_div = page.find("div", class_="Text", string=section)
 
