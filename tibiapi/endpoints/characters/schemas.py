@@ -22,7 +22,7 @@ class Guild(BaseModel):
 class Deaths(BaseModel):
     date: str
     death_level: str
-    pk_names: List[str] = []
+    killers: List[str] = []
 
 
 class Characters(BaseModel):

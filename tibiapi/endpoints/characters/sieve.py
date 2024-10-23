@@ -106,7 +106,7 @@ def extract_deaths(content: Tag) -> List[Deaths]:
         regex = re.match(r"^Killed at Level (\d+)", death_cause.text)
 
         death.append(
-            Deaths(date=death_date.text, death_level=regex.group(1), pk_names=pk_names)
+            Deaths(date=death_date.text, death_level=regex.group(1), killers=pk_names)
         )
 
     return death
