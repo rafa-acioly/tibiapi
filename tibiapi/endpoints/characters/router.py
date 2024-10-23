@@ -25,7 +25,8 @@ async def find(character_name: str) -> Character:
 @router.get(
     "/{character_name}/characters",
     response_model=List[Characters],
-    summary="Get all characters from a specific player.")
+    summary="Get all characters from a specific player.",
+)
 @cache_one_day()
 async def find_characters(character_name: str) -> Characters:
     """Get all characters from a specific player."""
@@ -35,7 +36,8 @@ async def find_characters(character_name: str) -> Characters:
 @router.get(
     "/{character_name}/achievements",
     response_model=List[Achievements],
-    summary="Get achievements from a character.")
+    summary="Get achievements from a character.",
+)
 @cache(expire=300)  # 5 minutes
 async def find_achievements(character_name: str) -> Achievements:
     """Get achievements from a character."""
@@ -45,7 +47,8 @@ async def find_achievements(character_name: str) -> Achievements:
 @router.get(
     "/{character_name}/deaths",
     response_model=List[Deaths],
-    summary="Get deaths from a character.")
+    summary="Get deaths from a character.",
+)
 @cache(expire=120)  # 2 minutes
 async def find_deaths(character_name: str) -> List[Deaths]:
     """Get deaths from a character."""

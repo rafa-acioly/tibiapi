@@ -15,6 +15,6 @@ router = APIRouter()
 async def index(
     world_name: World = None,
     vocation: HighScoreVocation = None,
-    category: HighScoreCategory = None
+    category: HighScoreCategory = None,
 ) -> list[HighScoreEntry]:
     return await service.find_highscores(world_name, vocation, category)

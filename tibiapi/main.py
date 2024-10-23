@@ -18,6 +18,5 @@ def startup():
     redis_cache.init(
         host_url=settings.CACHE_HOST,
         response_header="X-TibiApi-Cache",
-        ignore_arg_types=[Request, Response]
+        ignore_arg_types=[Request, Response],
     )
-

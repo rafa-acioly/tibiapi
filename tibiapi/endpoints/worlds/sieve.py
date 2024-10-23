@@ -12,12 +12,11 @@ def extract_world_detail(content: ResultSet) -> WorldDetail:
 
     data = extract_table_information(content)
 
-    online_record_pattern = r'([\d,]+) players \(on (.*?)\)'
-    match = regex.match(online_record_pattern, data['online_record'])
+    online_record_pattern = r"([\d,]+) players \(on (.*?)\)"
+    match = regex.match(online_record_pattern, data["online_record"])
 
     record = WorldOnlineRecord(
-        players=int(match.group(1).replace(",", "").strip()),
-        date=match.group(2)
+        players=int(match.group(1).replace(",", "").strip()), date=match.group(2)
     )
 
     formatted_data = data | {

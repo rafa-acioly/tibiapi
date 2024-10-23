@@ -31,7 +31,8 @@ async def find_guild(guild_name: str) -> Guild:
     page = await get_guild(guild_name)
 
     guild_info_container = page.select_one(
-        GuildPageIdentifiers.INFORMATION_CONTAINER.value)
+        GuildPageIdentifiers.INFORMATION_CONTAINER.value
+    )
     guild_paragraphs = guild_info_container.text.split("\n")
 
     foundation = sieve.extract_guild_foundation(guild_paragraphs)
@@ -47,7 +48,9 @@ async def find_guild(guild_name: str) -> Guild:
     )
 
 
-async def find_guild_members(guild_name: str, online: bool | None = False) -> List[GuildMember]:
+async def find_guild_members(
+    guild_name: str, online: bool | None = False
+) -> List[GuildMember]:
     """
     Get the members of a guild by its name.
 
@@ -59,8 +62,11 @@ async def find_guild_members(guild_name: str, online: bool | None = False) -> Li
     page = await get_guild(guild_name)
 
     members_table = page.select_one(".TableContainer table.Table3")
-    table_rows = members_table.select("tr[bgcolor]") if not online else members_table.select(
-        "tr[bgcolor]:has(td:-soup-contains('online'))")
+    table_rows = (
+        members_table.select("tr[bgcolor]")
+        if not online
+        else members_table.select("tr[bgcolor]:has(td:-soup-contains('online'))")
+    )
 
     return sieve.extract_guild_members(table_rows)
 

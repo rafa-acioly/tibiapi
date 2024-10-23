@@ -9,7 +9,7 @@ from .schemas import HighScoreEntry
 async def find_highscores(
     world_name: World = None,
     vocation: HighScoreVocation = HighScoreVocation.NONE,
-    category: HighScoreCategory = None
+    category: HighScoreCategory = None,
 ) -> list[HighScoreEntry]:
     """
     Retrieve the highscores page by its parameters.
@@ -18,7 +18,7 @@ async def find_highscores(
     query = {
         "world": world_name.title() if world_name else None,
         "profession": HighScoreVocation.numericOf(vocation),
-        "category": HighScoreCategory.numericOf(category)
+        "category": HighScoreCategory.numericOf(category),
     }
 
     if any(query.values()):
@@ -26,7 +26,6 @@ async def find_highscores(
     else:
         page = await get_highscore()
 
-    table_rows = page.select(
-        "tr:has(a[href*='subtopic=characters&name'])")
+    table_rows = page.select("tr:has(a[href*='subtopic=characters&name'])")
 
     return sieve.extract_players_highscore(category, table_rows)

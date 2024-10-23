@@ -107,18 +107,19 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
         # The member name is inside an <a> tag
         # The title is the text after the member name
         member_name = cells[1].find("a").text
-        title = cell_content.replace(
-            member_name, "").replace("(", "").replace(")", "")
+        title = cell_content.replace(member_name, "").replace("(", "").replace(")", "")
 
-        members.append(GuildMember(
-            rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
-            name=cells[1].find("a").text,
-            title=title.strip() if len(title.strip()) > 0 else None,
-            vocation=cells[2].text,
-            level=cells[3].text,
-            joining_date=cells[4].text,
-            status=cells[5].text,
-        ))
+        members.append(
+            GuildMember(
+                rank=cells[0].text if len(cells[0].text.strip()) > 0 else None,
+                name=cells[1].find("a").text,
+                title=title.strip() if len(title.strip()) > 0 else None,
+                vocation=cells[2].text,
+                level=cells[3].text,
+                joining_date=cells[4].text,
+                status=cells[5].text,
+            )
+        )
 
     return members
 
@@ -133,13 +134,15 @@ def extract_guild_member_invite(tag: Tag) -> List[GuildMember]:
     for invitation in invitations[1:]:
         cells = invitation.find_all("td")
 
-        invited_members.append(GuildMember(
-            name=cells[0].find("a").text,
-            rank=cells[1].text if len(cells[1].text.strip()) > 0 else None,
-            vocation=cells[2].text,
-            level=cells[3].text,
-            invited_by=cells[4].text,
-            date=cells[5].text,
-        ))
+        invited_members.append(
+            GuildMember(
+                name=cells[0].find("a").text,
+                rank=cells[1].text if len(cells[1].text.strip()) > 0 else None,
+                vocation=cells[2].text,
+                level=cells[3].text,
+                invited_by=cells[4].text,
+                date=cells[5].text,
+            )
+        )
 
     return invited_members

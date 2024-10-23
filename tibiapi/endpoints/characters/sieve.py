@@ -42,10 +42,12 @@ def extract_achievements(content: Tag) -> List[Achievements]:
         # the column with the name will have an HTML
         # child with a tag "secret".
         secrets = name_column.findChildren(
-            "img", {"class": CharacterPageIdentifiers.SECRET_ACHIEVEMENT.value})
+            "img", {"class": CharacterPageIdentifiers.SECRET_ACHIEVEMENT.value}
+        )
 
-        mapped_achievements.append(Achievements(
-            grade=grade, name=name_column.text, secret=len(secrets) > 0))
+        mapped_achievements.append(
+            Achievements(grade=grade, name=name_column.text, secret=len(secrets) > 0)
+        )
 
     return mapped_achievements
 
@@ -81,8 +83,9 @@ def extract_characters(content: Tag) -> List[Characters]:
         # that represents the main character of the player.
         main = name_column.find("img") is not None
 
-        characters.append(Characters(
-            name=name, world=world_column.text, main=main, status=status))
+        characters.append(
+            Characters(name=name, world=world_column.text, main=main, status=status)
+        )
 
     return characters
 
@@ -91,7 +94,7 @@ def extract_deaths(content: Tag) -> List[Deaths]:
     """
     Extract deaths from the character's page.
     """
-    
+
     death: List[Deaths] = []
     for deaths in content.find_all("tr"):
         death_date, death_cause = deaths.find_all("td")
@@ -100,5 +103,5 @@ def extract_deaths(content: Tag) -> List[Deaths]:
         killers = [killer.text for killer in killers_tag]
 
         death.append(Deaths(date=death_date.text, killers=killers))
-    
+
     return death

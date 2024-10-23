@@ -4,7 +4,9 @@ from tibiapi.gateway.client import get_page
 
 from .exceptions import GuildNotFound
 
-GUILD_URL = "https://www.tibia.com/community/?subtopic=guilds&page=view&GuildName={guild_name}"
+GUILD_URL = (
+    "https://www.tibia.com/community/?subtopic=guilds&page=view&GuildName={guild_name}"
+)
 
 
 async def get_guild(name: str) -> BeautifulSoup:

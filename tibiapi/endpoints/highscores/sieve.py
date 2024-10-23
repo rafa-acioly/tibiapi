@@ -6,7 +6,9 @@ from .enums import HighScoreCategory
 from .schemas import HighScoreEntry
 
 
-def extract_players_highscore(category: HighScoreCategory, content: ResultSet[Tag]) -> list[HighScoreEntry]:
+def extract_players_highscore(
+    category: HighScoreCategory, content: ResultSet[Tag]
+) -> list[HighScoreEntry]:
     """
     Parse the high score information from the content.
     """
@@ -38,7 +40,7 @@ def _extract_default_table(content: ResultSet[Tag]) -> list[HighScoreEntry]:
                 vocation=data[2].text,
                 world=data[3].text,
                 level=int(data[4].text),
-                points=stringify_number(exp_points)
+                points=stringify_number(exp_points),
             )
         )
 
@@ -66,7 +68,7 @@ def _extract_loyalty_points(content: ResultSet[Tag]) -> list[HighScoreEntry]:
                 vocation=data[3].text,
                 world=data[4].text,
                 level=int(data[5].text),
-                points=stringify_number(exp_points)
+                points=stringify_number(exp_points),
             )
         )
 

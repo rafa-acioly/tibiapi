@@ -16,7 +16,9 @@ async def find(guild_name: str) -> Guild:
     return await service.find_guild(guild_name)
 
 
-@router.get("/{guild_name}/members", summary="Find all the members of a guild by its name.")
+@router.get(
+    "/{guild_name}/members", summary="Find all the members of a guild by its name."
+)
 @cache_one_hour()
 async def find_members(guild_name: str, online: bool = False) -> List[GuildMember]:
     """Find the members of a guild by its name."""
@@ -25,7 +27,8 @@ async def find_members(guild_name: str, online: bool = False) -> List[GuildMembe
 
 @router.get(
     "/{guild_name}/members/invites",
-    summary="Find all the invited members of a guild by its name.")
+    summary="Find all the invited members of a guild by its name.",
+)
 @cache_one_hour()
 async def find_invites(guild_name: str) -> List[GuildMemberInvite]:
     """Find the invited members of a guild by its name."""
