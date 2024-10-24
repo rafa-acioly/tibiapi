@@ -1,9 +1,10 @@
 import re as regex
+from datetime import datetime
 from typing import Dict, List
 
 from bs4.element import ResultSet, Tag
 
-from .schemas import GuildHall, GuildMember
+from .schemas import GuildHall, GuildMember, GuildMemberInvite
 
 
 def extract_guild_foundation(paragraphs: List[str]) -> Dict[str, str]:
@@ -100,7 +101,7 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
     members: List[GuildMember] = []
 
     # TODO: Find a way to get the first and second member information without skipping the rows
-    for row in tags:
+    for row in tags[2:]:
         cells = row.find_all("td")
         cell_content = cells[1].text
 
@@ -124,24 +125,26 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
     return members
 
 
-def extract_guild_member_invite(tag: Tag) -> List[GuildMember]:
+def extract_guild_member_invite(tag: Tag) -> List[GuildMemberInvite]:
     """Extract the invited guild members from the guild page table."""
 
     # The first row is the table header and it has class "LabelH", we need to skip it
     invitations = tag.select("tr:not(.LabelH)")
 
-    invited_members: List[GuildMember] = []
-    for invitation in invitations[1:]:
-        cells = invitation.find_all("td")
+    invited_members: List[GuildMemberInvite] = []
+    for invitation in invitations:
+        name, invitation = invitation.find_all("td")
+
+        # convert the invitation date from "Month day Year" to "Year-Month-Day"
+        # the date is in the format "Jan 01 2021"
+        invitation_date = datetime.strptime(invitation.text, "%b %d %Y").strftime(
+            "%Y-%m-%d"
+        )
 
         invited_members.append(
-            GuildMember(
-                name=cells[0].find("a").text,
-                rank=cells[1].text if len(cells[1].text.strip()) > 0 else None,
-                vocation=cells[2].text,
-                level=cells[3].text,
-                invited_by=cells[4].text,
-                date=cells[5].text,
+            GuildMemberInvite(
+                name=name.text,
+                invited_at=invitation_date,
             )
         )
 

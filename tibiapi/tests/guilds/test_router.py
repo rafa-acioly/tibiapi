@@ -24,8 +24,7 @@ def test_get_guild_not_found():
     response = client.get("/api/v1/guilds/NotAValidGuild")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "detail": "guild NotAValidGuild not found."}
+    assert response.json() == {"detail": "guild NotAValidGuild not found."}
 
 
 @pytest.mark.vcr()
@@ -43,8 +42,7 @@ def test_get_guild_members_not_found():
     response = client.get("/api/v1/guilds/NotAValidGuild/members")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "detail": "guild NotAValidGuild not found."}
+    assert response.json() == {"detail": "guild NotAValidGuild not found."}
 
 
 @pytest.mark.vcr()
@@ -62,5 +60,14 @@ def test_get_guild_members_invites_not_found():
     response = client.get("/api/v1/guilds/NotAValidGuild/members/invites")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "detail": "guild NotAValidGuild not found."}
+    assert response.json() == {"detail": "guild NotAValidGuild not found."}
+
+
+@pytest.mark.vcr()
+def test_get_guild_members_empty():
+    response = client.get("/api/v1/guilds/Forgotten Hunters/members/invites")
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 0

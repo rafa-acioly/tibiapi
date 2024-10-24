@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class GuildMemberInvite(BaseModel):
     name: str
-    invitation_date: datetime
+    invited_at: str
 
 
 class GuildMember(BaseModel):

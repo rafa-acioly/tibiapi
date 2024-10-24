@@ -73,7 +73,11 @@ async def find_guild_members_invite(guild_name: str) -> List[GuildMemberInvite]:
 
     page = await get_guild(guild_name)
 
-    invitation_container = page.select(".TableContentContainer")
-    invitation_table = invitation_container[len(invitation_container) - 4]
+    invitation_container = page.select_one(
+        ".TableContentContainer:has(table.TableContent:has(tr.Odd))"
+    )
 
-    return sieve.extract_guild_member_invite(invitation_table)
+    if not invitation_container:
+        return []
+
+    return sieve.extract_guild_member_invite(invitation_container)
