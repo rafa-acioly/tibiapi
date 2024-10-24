@@ -100,8 +100,7 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
 
     members: List[GuildMember] = []
 
-    # TODO: Find a way to get the first and second member information without skipping the rows
-    for row in tags[2:]:
+    for row in tags:
         cells = row.find_all("td")
         cell_content = cells[1].text
 
@@ -109,6 +108,7 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
         # The title is the text after the member name
         member_name = cells[1].find("a").text
         title = cell_content.replace(member_name, "").replace("(", "").replace(")", "")
+        joining_date = datetime.strptime(cells[4].text, "%b %d %Y").strftime("%Y-%m-%d")
 
         members.append(
             GuildMember(
@@ -117,7 +117,7 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
                 title=title.strip() if len(title.strip()) > 0 else None,
                 vocation=cells[2].text,
                 level=cells[3].text,
-                joining_date=cells[4].text,
+                joining_date=joining_date,
                 status=cells[5].text,
             )
         )

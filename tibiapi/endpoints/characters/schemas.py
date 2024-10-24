@@ -21,7 +21,7 @@ class Guild(BaseModel):
 
 class Deaths(BaseModel):
     date: str
-    death_level: str
+    death_level: int
     killers: List[str] = []
 
 
