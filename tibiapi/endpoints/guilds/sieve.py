@@ -100,7 +100,7 @@ def extract_guild_members(tags: ResultSet[Tag]) -> List[GuildMember]:
     members: List[GuildMember] = []
 
     # TODO: Find a way to get the first and second member information without skipping the rows
-    for row in tags[2:]:
+    for row in tags:
         cells = row.find_all("td")
         cell_content = cells[1].text
 

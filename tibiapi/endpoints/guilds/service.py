@@ -51,21 +51,18 @@ async def find_guild(guild_name: str) -> Guild:
 async def find_guild_members(
     guild_name: str, online: bool | None = False
 ) -> List[GuildMember]:
-    """
-    Get the members of a guild by its name.
-
-    **The table that contains the guild members is a real mess**, the first "row"
-    contains the table title, it's not a real row, so we need to skip it.
-
-    """
+    """Get the members of a guild by its name."""
 
     page = await get_guild(guild_name)
 
     members_table = page.select_one(".TableContainer table.Table3")
+
+    # The table rows are colored, so we can filter them by the bgcolor attribute.
+    # Players that are online have a green status, so we can filter them by that.
     table_rows = (
         members_table.select("tr[bgcolor]")
         if not online
-        else members_table.select("tr[bgcolor]:has(td:-soup-contains('online'))")
+        else members_table.select("tr[bgcolor]:has(td.onlinestatus > span.green)")
     )
 
     return sieve.extract_guild_members(table_rows)
