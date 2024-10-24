@@ -10,17 +10,20 @@ async def list_worlds() -> List[World]:
 
     page = await all_worlds()
 
-    worlds_table = page.select(".TableContent")
+    breakpoint()
+    worlds_table = page.select_one(".TableContent:has(tr.Even)")
 
     # The third table contains the list of worlds.
     # The first and second tables are the header.
-    table_rows = worlds_table[2].select("tr")
+    table_rows = worlds_table.select("tr:not(.LabelH)")
 
     worlds: List[World] = []
 
     # Skip the first row, which is the header.
-    for row in table_rows[1:]:
+    for row in table_rows:
         cells = row.find_all("td")
+        additional_info = cells[5].text.split(",") if len(cells[5].text) > 0 else []
+        additional_information = [info.strip() for info in additional_info]
 
         worlds.append(
             World(
@@ -28,9 +31,7 @@ async def list_worlds() -> List[World]:
                 players_online=int(cells[1].text),
                 location=cells[2].text,
                 pvp_type=cells[3].text,
-                additional_information=(
-                    cells[5].text if len(cells[5].text) > 0 else None
-                ),
+                additional_information=additional_information,
             )
         )
 

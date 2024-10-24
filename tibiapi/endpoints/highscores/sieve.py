@@ -9,9 +9,7 @@ from .schemas import HighScoreEntry
 def extract_players_highscore(
     category: HighScoreCategory, content: ResultSet[Tag]
 ) -> list[HighScoreEntry]:
-    """
-    Parse the high score information from the content.
-    """
+    """Parse the high score information from the content."""
 
     # The loyalty points highscore has an extra column for the title.
     # The default highscore has 6 columns, while the loyalty points highscore has 7.
@@ -22,9 +20,8 @@ def extract_players_highscore(
 
 
 def _extract_default_table(content: ResultSet[Tag]) -> list[HighScoreEntry]:
-    """
-    Extract default values from table.
-    """
+    """Extract default values from table."""
+
     players: HighScoreEntry = []
 
     # Skip the first two rows, which are menu and headers.
@@ -48,9 +45,7 @@ def _extract_default_table(content: ResultSet[Tag]) -> list[HighScoreEntry]:
 
 
 def _extract_loyalty_points(content: ResultSet[Tag]) -> list[HighScoreEntry]:
-    """
-    Extract Loyalty points highscore.
-    """
+    """Extract Loyalty points highscore."""
 
     players: HighScoreEntry = []
 

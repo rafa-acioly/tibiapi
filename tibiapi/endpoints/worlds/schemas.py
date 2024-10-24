@@ -8,7 +8,7 @@ class World(BaseModel):
     players_online: int
     pvp_type: str
     location: str
-    additional_information: str | None = Field(default=None)
+    additional_information: List[str] | None = Field(default=[])
 
 
 class WorldQuestTitle(BaseModel):
